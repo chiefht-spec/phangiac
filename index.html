@@ -1,0 +1,404 @@
+import React, { useState, useEffect } from 'react';
+import { BookOpen, CheckCircle2, Info, Sparkles, PenTool, AlertCircle, ThumbsUp, PartyPopper, Trophy, ArrowRight } from 'lucide-react';
+
+// --- COMPONENT HÌNH ĐỘNG CHO PHẦN LÝ THUYẾT ---
+const AnimatedBisector = () => {
+  return (
+    <div className="relative w-full max-w-xs mx-auto drop-shadow-xl bg-white rounded-full p-4 border-4 border-purple-100">
+      <svg viewBox="0 0 100 100" className="w-full h-full">
+        {/* Tam giác nền (Tam giác thường) */}
+        <polygon points="30,20 10,80 90,80" fill="#f8fafc" stroke="#334155" strokeWidth="3" strokeLinejoin="round" />
+        
+        {/* Đường phân giác động */}
+        <line x1="30" y1="20" x2="44" y2="80" stroke="#a855f7" strokeWidth="4" strokeDasharray="80" className="animate-[dash_2s_ease-in-out_infinite_alternate]" />
+        
+        {/* Ký hiệu 2 góc bằng nhau */}
+        <path d="M 25 35 Q 29 38 33.5 35" fill="none" stroke="#a855f7" strokeWidth="2.5" className="animate-pulse" />
+        <path d="M 33.5 35 Q 39 38 45 35" fill="none" stroke="#a855f7" strokeWidth="2.5" className="animate-pulse" />
+        
+        {/* Các đỉnh */}
+        <circle cx="30" cy="20" r="4" fill="#334155" />
+        <text x="30" y="12" fontSize="8" fontWeight="bold" textAnchor="middle" fill="#334155">A</text>
+        <circle cx="10" cy="80" r="4" fill="#334155" />
+        <text x="5" y="85" fontSize="8" fontWeight="bold" fill="#334155">B</text>
+        <circle cx="90" cy="80" r="4" fill="#334155" />
+        <text x="95" y="85" fontSize="8" fontWeight="bold" textAnchor="end" fill="#334155">C</text>
+      </svg>
+      <style>{`
+        @keyframes dash {
+          0% { stroke-dashoffset: 80; }
+          100% { stroke-dashoffset: 0; }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+// --- COMPONENT HÌNH TĨNH CHO CÂU HỎI 1 ---
+const MiniTriangle = ({ type }) => (
+  <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+    {/* Tam giác thường để phân biệt rõ */}
+    <polygon points="30,20 10,80 90,80" fill="#f8fafc" stroke="#334155" strokeWidth="4" strokeLinejoin="round" />
+    
+    {type === 'altitude' && <><line x1="30" y1="20" x2="30" y2="80" stroke="#ef4444" strokeWidth="4" /><path d="M 30 73 L 37 73 L 37 80" fill="none" stroke="#ef4444" strokeWidth="3" /></>}
+    {type === 'median' && <><line x1="30" y1="20" x2="50" y2="80" stroke="#3b82f6" strokeWidth="4" /><circle cx="50" cy="80" r="4" fill="#3b82f6" /><line x1="28" y1="77" x2="32" y2="83" stroke="#334155" strokeWidth="3" /><line x1="68" y1="77" x2="72" y2="83" stroke="#334155" strokeWidth="3" /></>}
+    {type === 'bisector' && <><line x1="30" y1="20" x2="44" y2="80" stroke="#a855f7" strokeWidth="4" /><path d="M 25 35 Q 29 38 33.5 35" fill="none" stroke="#a855f7" strokeWidth="3" /><path d="M 33.5 35 Q 39 38 45 35" fill="none" stroke="#a855f7" strokeWidth="3" /></>}
+    {type === 'perp_bisector' && <><line x1="50" y1="30" x2="50" y2="100" stroke="#f59e0b" strokeWidth="4" /><path d="M 50 73 L 57 73 L 57 80" fill="none" stroke="#f59e0b" strokeWidth="3" /><circle cx="50" cy="80" r="4" fill="#f59e0b" /><line x1="28" y1="77" x2="32" y2="83" stroke="#334155" strokeWidth="3" /><line x1="68" y1="77" x2="72" y2="83" stroke="#334155" strokeWidth="3" /></>}
+    
+    <circle cx="30" cy="20" r="4" fill="#334155" /><circle cx="10" cy="80" r="4" fill="#334155" /><circle cx="90" cy="80" r="4" fill="#334155" />
+  </svg>
+);
+
+// --- COMPONENT HÌNH TỔNG HỢP CHO CÂU HỎI 4 ---
+const AllLinesTriangle = () => (
+  <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible filter drop-shadow-md">
+    {/* Tam giác nét mảnh hơn */}
+    <polygon points="20,20 10,80 90,80" fill="#f8fafc" stroke="#334155" strokeWidth="2" strokeLinejoin="round" />
+    
+    {/* Ký hiệu 2 đoạn bằng nhau cho Trung tuyến/Trung trực (tại M=50) */}
+    <line x1="28" y1="77" x2="32" y2="83" stroke="#334155" strokeWidth="1.5" />
+    <line x1="68" y1="77" x2="72" y2="83" stroke="#334155" strokeWidth="1.5" />
+
+    {/* 1. Đường Cao AH (Đỏ) - Nét mảnh */}
+    <line x1="20" y1="20" x2="20" y2="80" stroke="#ef4444" strokeWidth="2" />
+    <path d="M 20 76 L 24 76 L 24 80" fill="none" stroke="#ef4444" strokeWidth="1.5" />
+    
+    {/* 2. Đường Phân Giác AD (Tím) - Nét mảnh và sửa ký hiệu 2 góc */}
+    <line x1="20" y1="20" x2="42" y2="80" stroke="#a855f7" strokeWidth="2" />
+    <path d="M 17.5 35 Q 21.5 38 25.5 35" fill="none" stroke="#a855f7" strokeWidth="1.5" />
+    <path d="M 25.5 35 Q 31.5 38 37.5 35" fill="none" stroke="#a855f7" strokeWidth="1.5" />
+    
+    {/* 3. Đường Trung Tuyến AM (Xanh) - Nét mảnh */}
+    <line x1="20" y1="20" x2="50" y2="80" stroke="#3b82f6" strokeWidth="2" />
+    
+    {/* 4. Đường Trung Trực d (Cam) - Nét mảnh */}
+    <line x1="50" y1="25" x2="50" y2="95" stroke="#f59e0b" strokeWidth="2" />
+    <path d="M 50 76 L 54 76 L 54 80" fill="none" stroke="#f59e0b" strokeWidth="1.5" />
+
+    {/* Các đỉnh và Tên Điểm */}
+    <circle cx="20" cy="20" r="3" fill="#334155" />
+    <text x="20" y="14" fontSize="8" fontWeight="bold" textAnchor="middle" fill="#334155">A</text>
+    
+    <circle cx="10" cy="80" r="3" fill="#334155" />
+    <text x="5" y="85" fontSize="8" fontWeight="bold" fill="#334155">B</text>
+    
+    <circle cx="90" cy="80" r="3" fill="#334155" />
+    <text x="95" y="85" fontSize="8" fontWeight="bold" textAnchor="end" fill="#334155">C</text>
+
+    {/* Các điểm ở đáy được làm nhỏ gọn hơn */}
+    <circle cx="20" cy="80" r="2.5" fill="#ef4444" />
+    <text x="20" y="90" fontSize="7" fontWeight="bold" textAnchor="middle" fill="#ef4444">H</text>
+
+    <circle cx="42" cy="80" r="2.5" fill="#a855f7" />
+    <text x="42" y="90" fontSize="7" fontWeight="bold" textAnchor="middle" fill="#a855f7">D</text>
+
+    <circle cx="50" cy="80" r="2.5" fill="#3b82f6" />
+    <text x="50" y="90" fontSize="7" fontWeight="bold" textAnchor="middle" fill="#3b82f6">M</text>
+
+    {/* Tên đường thẳng d */}
+    <text x="54" y="30" fontSize="8" fontWeight="bold" fill="#f59e0b">d</text>
+  </svg>
+);
+
+// --- PHẦN 1: KHÁI NIỆM & BÀI TẬP PHÂN BIỆT ---
+const ConceptSection = () => {
+  const [quizState, setQuizState] = useState({});
+  const [matchState, setMatchState] = useState({ AH: null, AM: null, AD: null, d: null });
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const compliments = ["Xuất sắc! 🎉", "Tuyệt vời quá! 🌟", "Chính xác 100%! 👍", "Quá đỉnh luôn! 🚀", "Thông minh lắm! 🧠"];
+  const getRandomCompliment = () => compliments[Math.floor(Math.random() * compliments.length)];
+
+  const questions = [
+    {
+      id: 'q1',
+      type: 'image',
+      q: "Câu 1: Trong 4 hình dưới đây, hình nào vẽ ĐÚNG đường phân giác của tam giác?",
+      options: [
+        { id: 'altitude', label: 'Hình 1 (Đường màu đỏ)' },
+        { id: 'median', label: 'Hình 2 (Đường màu xanh)' },
+        { id: 'bisector', label: 'Hình 3 (Đường màu tím)' },
+        { id: 'perp_bisector', label: 'Hình 4 (Đường màu cam)' }
+      ],
+      ans: 'bisector',
+      explanation: 'Hình 3 là đường phân giác vì có ký hiệu chia đôi góc ở đỉnh. Hình 1 là Đường cao, Hình 2 là Trung tuyến, Hình 4 là Trung trực.'
+    },
+    {
+      id: 'q2',
+      type: 'text',
+      q: "Câu 2: Dấu hiệu bằng lời nào sau đây dùng để nhận biết ĐƯỜNG PHÂN GIÁC xuất phát từ một đỉnh của tam giác?",
+      options: [
+        "Đoạn thẳng đi qua trung điểm của cạnh đối diện.",
+        "Đoạn thẳng kẻ từ đỉnh và vuông góc với cạnh đối diện.",
+        "Đoạn thẳng kẻ từ đỉnh và chia góc ở đỉnh đó thành hai góc bằng nhau.",
+        "Đường thẳng đi qua trung điểm và vuông góc với đoạn thẳng."
+      ],
+      ans: "Đoạn thẳng kẻ từ đỉnh và chia góc ở đỉnh đó thành hai góc bằng nhau.",
+      explanation: "Đường phân giác luôn gắn liền với đặc điểm cốt lõi là 'chia đôi góc'."
+    },
+    {
+      id: 'q3',
+      type: 'text',
+      q: "Câu 3: Khi vẽ đường phân giác của một góc trong tam giác, ta BẮT BUỘC phải đánh dấu ký hiệu nào trên hình để phân biệt với các đường khác?",
+      options: [
+        "Ký hiệu góc vuông (90 độ) tại điểm cắt cạnh đối diện.",
+        "Ký hiệu hai đoạn thẳng bằng nhau ở cạnh đối diện.",
+        "Ký hiệu hai góc ở đỉnh bằng nhau (thường dùng chung 1 vạch hoặc 1 vòng cung).",
+        "Chỉ cần vẽ bằng thước thẳng, không cần ký hiệu."
+      ],
+      ans: "Ký hiệu hai góc ở đỉnh bằng nhau (thường dùng chung 1 vạch hoặc 1 vòng cung).",
+      explanation: "Ký hiệu hai góc bằng nhau chính là 'chứng minh thư' để nhận diện đường phân giác trên hình vẽ."
+    }
+  ];
+
+  const handleSelect = (qId, selectedOpt, correctAns, explanation) => {
+    if (quizState[qId]?.isCorrect) return; // Khóa nếu đã trả lời đúng
+    
+    if (selectedOpt === correctAns) {
+      setQuizState({ ...quizState, [qId]: { isCorrect: true, msg: getRandomCompliment(), exp: explanation } });
+    } else {
+      setQuizState({ ...quizState, [qId]: { isCorrect: false, msg: "Ồ chưa đúng rồi, bạn thử suy nghĩ và chọn lại nhé!" } });
+    }
+  };
+
+  const matchLines = [
+    { id: 'AH', name: 'Đoạn thẳng AH', correct: 'altitude', color: 'text-red-600' },
+    { id: 'AD', name: 'Đoạn thẳng AD', correct: 'bisector', color: 'text-purple-600' },
+    { id: 'AM', name: 'Đoạn thẳng AM', correct: 'median', color: 'text-blue-600' },
+    { id: 'd', name: 'Đường thẳng d', correct: 'perp', color: 'text-amber-600' }
+  ];
+
+  const lineTypes = [
+    { id: 'altitude', label: 'Đường Cao' },
+    { id: 'median', label: 'Trung Tuyến' },
+    { id: 'bisector', label: 'Phân Giác' },
+    { id: 'perp', label: 'Trung Trực' }
+  ];
+
+  const handleMatch = (lineId, selectedTypeId) => {
+    if (matchState[lineId] === 'correct') return;
+    
+    const line = matchLines.find(l => l.id === lineId);
+    if (line.correct === selectedTypeId) {
+      setMatchState({ ...matchState, [lineId]: 'correct' });
+    } else {
+      setMatchState({ ...matchState, [lineId]: 'wrong' });
+      setTimeout(() => setMatchState(prev => ({ ...prev, [lineId]: null })), 1500);
+    }
+  };
+
+  return (
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-gradient-to-b from-slate-50 to-purple-50">
+      <div className="max-w-5xl mx-auto space-y-8">
+        
+        {/* Khối Lý thuyết & Hình động */}
+        <div className="bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-xl shadow-purple-100 border border-purple-50 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-100 rounded-full blur-3xl opacity-50 -z-10 translate-x-1/2 -translate-y-1/2"></div>
+          
+          <h2 className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-700 to-indigo-600 mb-8 flex items-center gap-3">
+            <Sparkles className="text-purple-600" size={36} /> Khái niệm Đường Phân Giác
+          </h2>
+          
+          <div className="flex flex-col md:flex-row gap-8 items-center">
+            {/* Cột chữ */}
+            <div className="flex-1 space-y-6">
+              <p className="text-lg sm:text-xl text-slate-700 leading-relaxed font-medium">
+                Trong một tam giác, đoạn thẳng nối từ một đỉnh và <strong className="text-purple-700 bg-purple-100 px-2 py-1 rounded-md">chia góc ở đỉnh đó thành hai góc có số đo bằng nhau</strong> được gọi là đường phân giác của tam giác.
+              </p>
+              
+              <div className="bg-gradient-to-br from-indigo-50 to-purple-50 p-5 rounded-2xl border border-indigo-100 flex items-start gap-4">
+                <Info className="text-indigo-500 shrink-0 mt-1" size={28} />
+                <p className="text-indigo-900 text-lg">Mỗi tam giác có đúng <strong>3 đường phân giác</strong> xuất phát từ 3 đỉnh.</p>
+              </div>
+            </div>
+
+            {/* Cột hình ảnh động */}
+            <div className="w-full md:w-1/3 flex justify-center">
+              <AnimatedBisector />
+            </div>
+          </div>
+
+          {/* Bí kíp ghi vở */}
+          <div className="mt-8 bg-gradient-to-r from-amber-100 to-orange-50 border-l-[6px] border-amber-500 p-5 sm:p-6 rounded-r-2xl shadow-sm transform hover:scale-[1.01] transition-transform">
+            <h4 className="flex items-center gap-2 font-black text-amber-800 text-xl mb-2">
+              <PenTool size={24} /> BÍ KÍP GHI VỞ:
+            </h4>
+            <ul className="list-disc list-inside text-amber-900 space-y-2 text-lg font-medium">
+              <li>Đặc điểm nhận dạng: <strong>Chia đôi góc</strong>.</li>
+              <li>Ký hiệu bắt buộc: <strong>Đánh dấu 2 góc bằng nhau</strong> (ví dụ: dùng chung 1 vạch hoặc 1 vòng cung).</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Khối Thử thách */}
+        <div className="bg-white p-6 sm:p-10 rounded-[2.5rem] shadow-xl shadow-slate-200 border border-slate-100">
+          <h3 className="text-3xl font-black text-slate-800 mb-4 flex items-center gap-3">
+            <CheckCircle2 className="text-emerald-500 w-10 h-10"/> Thử thách: Vượt Ải Nhận Diện
+          </h3>
+          <p className="text-slate-600 text-lg mb-8">Hãy vượt qua 4 ải dưới đây. Nếu chọn sai, đừng lo lắng, bạn có thể chọn lại cho đến khi tìm ra đáp án đúng nhé!</p>
+          
+          <div className="space-y-8">
+            {/* Render 3 câu hỏi đầu */}
+            {questions.map((q, index) => {
+              if (index > currentStep) return null;
+              const state = quizState[q.id];
+              return (
+                <div key={q.id} className={`p-6 sm:p-8 rounded-3xl border-2 transition-all duration-300 ${state?.isCorrect ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-100 bg-white hover:border-purple-200 hover:shadow-lg'} animate-in fade-in slide-in-from-bottom-4`}>
+                  <h4 className="font-bold text-xl text-slate-800 mb-6">{q.q}</h4>
+                  
+                  {q.type === 'image' ? (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      {q.options.map(opt => (
+                        <button 
+                          key={opt.id} 
+                          onClick={() => handleSelect(q.id, opt.id, q.ans, q.explanation)}
+                          className={`p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all cursor-pointer bg-white
+                            ${state?.isCorrect && opt.id === q.ans ? 'border-emerald-500 ring-4 ring-emerald-200 scale-105 bg-emerald-50' : 
+                              state?.isCorrect && opt.id !== q.ans ? 'opacity-40 border-slate-200 grayscale' :
+                              'border-slate-200 hover:border-purple-400 hover:shadow-md hover:-translate-y-1'}`}
+                        >
+                          <div className="w-24 h-24"><MiniTriangle type={opt.id} /></div>
+                          <span className="font-bold text-slate-700 text-center">{opt.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-3 mb-4">
+                      {q.options.map((opt, oIdx) => (
+                        <button 
+                          key={oIdx} 
+                          onClick={() => handleSelect(q.id, opt, q.ans, q.explanation)}
+                          className={`text-left p-4 rounded-2xl border-2 font-medium text-lg transition-all
+                            ${state?.isCorrect && opt === q.ans ? 'border-emerald-500 bg-emerald-500 text-white shadow-md scale-[1.02]' : 
+                              state?.isCorrect && opt !== q.ans ? 'opacity-40 border-slate-200 bg-slate-50' :
+                              'border-slate-200 bg-white hover:border-purple-400 hover:bg-purple-50 text-slate-700 hover:scale-[1.01]'}`}
+                        >
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Khu vực phản hồi */}
+                  {state && !state.isCorrect && (
+                    <div className="mt-4 p-4 bg-red-50 text-red-600 rounded-xl font-bold flex items-center gap-2 animate-bounce">
+                      <AlertCircle /> {state.msg}
+                    </div>
+                  )}
+                  {state?.isCorrect && (
+                    <div className="mt-4 p-5 bg-emerald-100 rounded-2xl border border-emerald-200 animate-in slide-in-from-top-2">
+                      <p className="text-emerald-800 font-black text-xl mb-2 flex items-center gap-2">
+                        <PartyPopper className="text-emerald-600" /> {state.msg}
+                      </p>
+                      <p className="text-emerald-900 text-lg leading-relaxed">{state.exp}</p>
+                      
+                      {currentStep === index && (
+                        <button 
+                          onClick={() => setCurrentStep(index + 1)}
+                          className="mt-5 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-md hover:shadow-lg flex items-center gap-2 active:scale-95"
+                        >
+                          {index < 2 ? 'Tiếp tục câu hỏi sau' : 'Đến Trùm Cuối'} <ArrowRight size={20} />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Trùm cuối: Câu 4 - Ghép nối */}
+            {currentStep >= 3 && (
+              <div className="p-6 sm:p-8 rounded-3xl border-2 border-indigo-200 bg-gradient-to-br from-indigo-50 to-purple-50 relative overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700">
+                <div className="absolute top-0 left-0 bg-indigo-500 text-white px-4 py-1 rounded-br-2xl font-bold uppercase text-sm tracking-wider">Trùm Cuối</div>
+                <h4 className="font-bold text-xl text-indigo-900 mb-2 mt-4">Câu 4: Bức tranh toàn cảnh</h4>
+                <p className="text-indigo-700 mb-6 font-medium">Hình vẽ dưới đây có chứa cả 4 loại đường kèm theo các ký hiệu hình học. Bạn hãy quan sát kỹ và chọn loại đường tương ứng với tên gọi của nó nhé!</p>
+                
+                <div className="flex flex-col md:flex-row gap-8 items-center">
+                  {/* Hình ảnh */}
+                  <div className="w-full md:w-1/2 max-w-sm bg-white p-4 rounded-3xl shadow-lg border border-indigo-100">
+                    <AllLinesTriangle />
+                  </div>
+                  
+                  {/* Khu vực chọn */}
+                  <div className="w-full md:w-1/2 flex flex-col gap-4">
+                    {matchLines.map((line) => {
+                      const status = matchState[line.id];
+                      return (
+                        <div key={line.id} className="flex flex-col xl:flex-row xl:items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 gap-3">
+                          <span className={`font-black text-lg w-40 ${line.color}`}>{line.name}</span>
+                          
+                          {status === 'correct' ? (
+                            <div className="flex items-center gap-2 text-emerald-600 font-bold bg-emerald-50 px-4 py-2 rounded-xl flex-1 justify-center">
+                              <CheckCircle2 size={20} /> Là {lineTypes.find(t => t.id === line.correct).label}
+                            </div>
+                          ) : (
+                            <div className="flex flex-wrap gap-2 flex-1 justify-end">
+                              {lineTypes.map(type => (
+                                <button 
+                                  key={type.id}
+                                  onClick={() => handleMatch(line.id, type.id)}
+                                  className={`px-3 py-2 rounded-xl text-slate-600 bg-slate-50 hover:bg-indigo-100 hover:text-indigo-700 font-medium text-sm transition-all shadow-sm active:scale-95 border border-slate-200 ${status === 'wrong' ? 'animate-shake border-red-200' : ''}`}
+                                >
+                                  {type.label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                          {status === 'wrong' && <span className="text-red-500 font-bold text-sm w-full xl:w-16 text-right animate-pulse mt-2 xl:mt-0">Thử lại!</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                
+                {/* Thông báo hoàn thành trùm cuối */}
+                {Object.values(matchState).every(val => val === 'correct') && (
+                  <div className="mt-8 p-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl shadow-lg text-center animate-in zoom-in">
+                    <h3 className="text-2xl font-black mb-2 flex justify-center items-center gap-2">
+                      <Trophy className="text-yellow-400" size={32} /> CHÚC MỪNG BẠN! 
+                    </h3>
+                    <p className="text-indigo-100 text-lg">Bạn đã hoàn thành xuất sắc thử thách và nắm cực vững cách phân biệt các đường trong tam giác!</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- COMPONENT CHÍNH ---
+const App = () => {
+  return (
+    <div className="flex flex-col h-screen bg-white font-sans text-slate-800">
+      <header className="bg-gradient-to-r from-purple-800 to-indigo-700 text-white px-6 py-4 shadow-lg z-20 shrink-0">
+        <h1 className="text-2xl font-black uppercase tracking-tight flex items-center gap-2">
+          Toán 7 <span className="text-purple-300 font-normal">|</span> Tính chất ba đường phân giác của tam giác
+        </h1>
+      </header>
+      
+      <nav className="flex bg-white border-b border-slate-200 px-4 shrink-0 shadow-sm z-10">
+        <button className="flex items-center gap-2 px-6 py-4 font-bold border-b-4 border-purple-600 text-purple-700 bg-purple-50/50 transition-colors">
+          <BookOpen size={20} /> Phần 1: Khái niệm & Phân biệt
+        </button>
+      </nav>
+
+      <ConceptSection />
+      
+      <style>{`
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          25% { transform: translateX(-5px) rotate(-2deg); }
+          75% { transform: translateX(5px) rotate(2deg); }
+        }
+        .animate-shake {
+          animation: shake 0.3s ease-in-out;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default App;
