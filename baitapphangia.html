@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập Tia phân giác</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Cấu hình MathJax render Toán học -->
+    <script>
+        MathJax = {
+            tex: { 
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: { fontCache: 'global' }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+        }
+
+        .accordion-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .accordion-content.open {
+            grid-template-rows: 1fr;
+        }
+        .accordion-inner {
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            margin: 1.5rem auto;
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 0.5rem;
+        }
+
+        .math-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.5rem 0;
+            margin: 0.5rem 0;
+        }
+        
+        mjx-container[jax="SVG"][display="true"] {
+            margin: 0 !important;
+        }
+
+        mjx-container:not([display="true"]) {
+            display: inline-block !important;
+            vertical-align: middle !important;
+        }
+        
+        p {
+            word-break: break-word;
+        }
+        
+        .solution-text p {
+            margin-bottom: 0.75rem;
+            line-height: 1.75;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased p-4 md:p-6 lg:p-10 notranslate">
+
+    <div class="max-w-4xl mx-auto">
+        
+        <header class="text-center mb-10">
+            <div class="inline-flex items-center justify-center p-3 bg-blue-600 rounded-2xl mb-4 shadow-lg shadow-blue-200">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">Tia Phân Giác</h1>
+            <p class="text-slate-500 text-lg">Hệ thống bài tập Toán Hình học được phân loại theo độ khó</p>
+        </header>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-blue-50 border-b border-blue-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-blue-800">Bài 1</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <div class="mb-4 space-y-2">
+                    <p>a) Trong Hình vẽ, tìm tia phân giác của các góc $\widehat{ABC}$; $\widehat{ADC}$.</p>
+                    <p>b) Cho biết $\widehat{ABC}=180^{\circ}$, $\widehat{ADC}=60^{\circ}$. Tính số đo của các góc $\widehat{ABO}$; $\widehat{ADO}$.</p>
+                </div>
+                <canvas id="canvasBai1" width="300" height="280"></canvas>
+                
+                <button onclick="toggleSolution(this, 'sol1')" class="mt-4 inline-flex items-center gap-2 text-white bg-blue-600 hover:bg-blue-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem lời giải</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol1" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+                                <span>✍️</span> Lời giải chi tiết
+                            </h3>
+                            <p class="font-semibold text-blue-700">Câu a:</p>
+                            <p>Quan sát hình vẽ, ta thấy:</p>
+                            <ul class="list-disc pl-6 mb-4 space-y-1">
+                                <li>Tia $BO$ chia $\widehat{ABC}$ thành hai góc bằng nhau $\Rightarrow$ Tia $BO$ là tia phân giác của $\widehat{ABC}$.</li>
+                                <li>Tia $DO$ chia $\widehat{ADC}$ thành hai góc bằng nhau $\Rightarrow$ Tia $DO$ là tia phân giác của $\widehat{ADC}$.</li>
+                            </ul>
+
+                            <p class="font-semibold text-blue-700 mt-4">Câu b:</p>
+                            <p>Vì tia $BO$ là tia phân giác của $\widehat{ABC}$ nên ta có:</p>
+                            <div class="math-container">
+                                $$ \widehat{ABO} = \widehat{CBO} = \frac{\widehat{ABC}}{2} = \frac{180^{\circ}}{2} = 90^{\circ} $$
+                            </div>
+                            <p>Vì tia $DO$ là tia phân giác của $\widehat{ADC}$ nên ta có:</p>
+                            <div class="math-container">
+                                $$ \widehat{ADO} = \widehat{CDO} = \frac{\widehat{ADC}}{2} = \frac{60^{\circ}}{2} = 30^{\circ} $$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-emerald-50 border-b border-emerald-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-emerald-800">Bài 2</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <div class="mb-4 space-y-2">
+                    <p>a) Vẽ góc $\widehat{xOy}$ có số đo $110^{\circ}$.</p>
+                    <p>b) Vẽ tia phân giác của $\widehat{xOy}$ trong câu a.</p>
+                </div>
+                
+                <button onclick="toggleSolution(this, 'sol2')" class="mt-4 inline-flex items-center gap-2 text-white bg-emerald-600 hover:bg-emerald-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem hình vẽ & giải thích</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol2" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+                                <span>🎨</span> Hướng dẫn vẽ
+                            </h3>
+                            <p>Để vẽ tia phân giác $Oz$, ta tính số đo góc tạo bởi tia phân giác và các cạnh của góc:</p>
+                            <div class="math-container">
+                                $$ \widehat{xOz} = \frac{\widehat{xOy}}{2} = \frac{110^{\circ}}{2} = 55^{\circ} $$
+                            </div>
+                            <p>Cách vẽ: Dùng thước đo góc, vẽ tia $Oz$ nằm giữa hai tia $Ox$ và $Oy$ sao cho $\widehat{xOz} = 55^{\circ}$.</p>
+                            <canvas id="canvasBai2" width="400" height="250" class="bg-white border border-slate-200 p-2"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-orange-50 border-b border-orange-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-orange-800">Bài 3</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <div class="mb-4 space-y-2">
+                    <p>Vẽ góc $\widehat{xOy}$ có số đo bằng $60^{\circ}$. Vẽ tia $Om$ là tia đối của tia $Ox$.</p>
+                    <p>a) Gọi tên hai góc kề bù có trong hình vừa vẽ.</p>
+                    <p>b) Tính số đo góc $\widehat{yOm}$.</p>
+                    <p>c) Vẽ tia $Ot$ là tia phân giác của góc $\widehat{xOy}$. Tính số đo các góc $\widehat{tOy}$ và $\widehat{tOm}$.</p>
+                </div>
+                
+                <button onclick="toggleSolution(this, 'sol3')" class="mt-4 inline-flex items-center gap-2 text-white bg-orange-600 hover:bg-orange-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem lời giải</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol3" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <canvas id="canvasBai3" width="400" height="220" class="bg-white border border-slate-200 p-2 mb-6"></canvas>
+                            
+                            <p class="font-semibold text-orange-700">Câu a:</p>
+                            <p>Hai góc kề bù có trong hình là góc $\widehat{xOy}$ và góc $\widehat{yOm}$ (do $Ox$ và $Om$ là 2 tia đối nhau, tạo thành góc bẹt trên cùng một nửa mặt phẳng).</p>
+
+                            <p class="font-semibold text-orange-700 mt-4">Câu b:</p>
+                            <p>Vì $\widehat{xOy}$ và $\widehat{yOm}$ là hai góc kề bù nên tổng số đo bằng $180^{\circ}$:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{xOy} + \widehat{yOm} &= 180^{\circ} \\
+                                60^{\circ} + \widehat{yOm} &= 180^{\circ} \\
+                                \widehat{yOm} &= 180^{\circ} - 60^{\circ} = 120^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+
+                            <p class="font-semibold text-orange-700 mt-4">Câu c:</p>
+                            <p>Vì tia $Ot$ là phân giác của góc $\widehat{xOy}$ nên:</p>
+                            <div class="math-container">
+                                $$ \widehat{tOy} = \frac{\widehat{xOy}}{2} = \frac{60^{\circ}}{2} = 30^{\circ} $$
+                            </div>
+                            
+                            <p>Ta có tia $Oy$ nằm giữa hai tia $Ot$ và $Om$, do đó góc $\widehat{tOm}$ bằng tổng hai góc thành phần:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{tOm} &= \widehat{tOy} + \widehat{yOm} \\
+                                &= 30^{\circ} + 120^{\circ} \\
+                                &= 150^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-rose-50 border-b border-rose-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-rose-800">Bài 4</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <p class="mb-2">Vẽ hai góc kề bù $\widehat{xOy}$, $\widehat{yOx'}$, biết $\widehat{xOy}=142^{\circ}$. Gọi $Oz$ là tia phân giác của $\widehat{xOy}$. Tính $\widehat{x'Oz}$.</p>
+                
+                <button onclick="toggleSolution(this, 'sol4')" class="mt-4 inline-flex items-center gap-2 text-white bg-rose-600 hover:bg-rose-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem lời giải</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol4" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <canvas id="canvasBai4" width="400" height="200" class="bg-white border border-slate-200 p-2 mb-6"></canvas>
+                            
+                            <p>Vì tia $Oz$ là tia phân giác của $\widehat{xOy}$ nên ta có:</p>
+                            <div class="math-container">
+                                $$ \widehat{xOz} = \widehat{zOy} = \frac{\widehat{xOy}}{2} = \frac{142^{\circ}}{2} = 71^{\circ} $$
+                            </div>
+                            
+                            <p>Theo đề bài, $\widehat{xOy}$ và $\widehat{yOx'}$ là hai góc kề bù, suy ra tia $Ox$ và tia $Ox'$ là hai tia đối nhau. Góc $\widehat{xOx'}$ là góc bẹt ($180^{\circ}$).</p>
+                            <p>Hai góc $\widehat{xOz}$ và $\widehat{x'Oz}$ kề bù với nhau, do đó:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{xOz} + \widehat{x'Oz} &= 180^{\circ} \\
+                                71^{\circ} + \widehat{x'Oz} &= 180^{\circ} \\
+                                \widehat{x'Oz} &= 180^{\circ} - 71^{\circ} = 109^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-fuchsia-50 border-b border-fuchsia-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-fuchsia-800">Bài 5</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <p class="mb-2">Vẽ hai góc kề bù $\widehat{xOy}$ và $\widehat{yOx'}$, biết $\widehat{xOy}=120^{\circ}$. Gọi $Oz$ là tia phân giác của $\widehat{xOy}$, $Oz'$ là tia phân giác của $\widehat{yOx'}$. Tính $\widehat{zOy}$, $\widehat{yOz'}$, $\widehat{zOz'}$.</p>
+                
+                <button onclick="toggleSolution(this, 'sol5')" class="mt-4 inline-flex items-center gap-2 text-white bg-fuchsia-600 hover:bg-fuchsia-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem lời giải</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol5" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <canvas id="canvasBai5" width="400" height="220" class="bg-white border border-slate-200 p-2 mb-6"></canvas>
+
+                            <p>Do $\widehat{xOy}$ và $\widehat{yOx'}$ là hai góc kề bù nên:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{yOx'} &= 180^{\circ} - \widehat{xOy} \\
+                                &= 180^{\circ} - 120^{\circ} = 60^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+
+                            <p>Vì tia $Oz$ là phân giác của $\widehat{xOy}$ nên:</p>
+                            <div class="math-container">
+                                $$ \widehat{zOy} = \frac{\widehat{xOy}}{2} = \frac{120^{\circ}}{2} = 60^{\circ} $$
+                            </div>
+                            
+                            <p>Vì tia $Oz'$ là phân giác của $\widehat{yOx'}$ nên:</p>
+                            <div class="math-container">
+                                $$ \widehat{yOz'} = \frac{\widehat{yOx'}}{2} = \frac{60^{\circ}}{2} = 30^{\circ} $$
+                            </div>
+                            
+                            <p>Tia $Oy$ nằm giữa hai tia $Oz$ và $Oz'$, do đó ta cộng số đo hai góc lại để tìm $\widehat{zOz'}$:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{zOz'} &= \widehat{zOy} + \widehat{yOz'} \\
+                                &= 60^{\circ} + 30^{\circ} \\
+                                &= 90^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+                            <p class="text-sm italic text-slate-500">*Ghi chú: Góc tạo bởi 2 tia phân giác của 2 góc kề bù luôn bằng $90^{\circ}$.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-cyan-50 border-b border-cyan-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-cyan-800">Bài 6</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <p class="mb-2">Vẽ góc bẹt $\widehat{xOy}$. Vẽ tia phân giác $Oz$ của góc đó. Vẽ tia phân giác $Ot$ của $\widehat{xOz}$. Vẽ tia phân giác $Ov$ của $\widehat{zOy}$. Tính $\widehat{tOv}$.</p>
+                
+                <button onclick="toggleSolution(this, 'sol6')" class="mt-4 inline-flex items-center gap-2 text-white bg-cyan-600 hover:bg-cyan-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem lời giải</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol6" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <canvas id="canvasBai6" width="400" height="220" class="bg-white border border-slate-200 p-2 mb-6"></canvas>
+
+                            <p>Góc bẹt $\widehat{xOy} = 180^{\circ}$.</p>
+                            <p>Vì $Oz$ là tia phân giác của $\widehat{xOy}$ nên ta có:</p>
+                            <div class="math-container">
+                                $$ \widehat{xOz} = \widehat{zOy} = \frac{180^{\circ}}{2} = 90^{\circ} $$
+                            </div>
+                            
+                            <p>Vì $Ot$ là tia phân giác của $\widehat{xOz}$ nên:</p>
+                            <div class="math-container">
+                                $$ \widehat{tOz} = \frac{\widehat{xOz}}{2} = \frac{90^{\circ}}{2} = 45^{\circ} $$
+                            </div>
+                            
+                            <p>Vì $Ov$ là tia phân giác của $\widehat{zOy}$ nên:</p>
+                            <div class="math-container">
+                                $$ \widehat{zOv} = \frac{\widehat{zOy}}{2} = \frac{90^{\circ}}{2} = 45^{\circ} $$
+                            </div>
+                            
+                            <p>Tia $Oz$ nằm giữa hai tia $Ot$ và $Ov$, ta có:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{tOv} &= \widehat{tOz} + \widehat{zOv} \\
+                                &= 45^{\circ} + 45^{\circ} \\
+                                &= 90^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+            <div class="bg-amber-50 border-b border-amber-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-amber-800">Bài 7</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <div class="mb-4 space-y-2">
+                    <p>Cho hai đường thẳng $MN$, $PQ$ cắt nhau tại $A$ và tạo thành $\widehat{PAM}=33^{\circ}$.</p>
+                    <p>a) Tính số đo các góc còn lại.</p>
+                    <p>b) Vẽ $At$ là tia phân giác của $\widehat{PAN}$. Hãy tính số đo của $\widehat{tAQ}$. Vẽ tia $At'$ là tia đối của tia $At$. Giải thích tại sao $At'$ là tia phân giác của $\widehat{MAQ}$.</p>
+                </div>
+                <canvas id="canvasBai7_Q" width="400" height="200"></canvas>
+                
+                <button onclick="toggleSolution(this, 'sol7')" class="mt-4 inline-flex items-center gap-2 text-white bg-amber-600 hover:bg-amber-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem lời giải</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol7" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+                                <span>✍️</span> Lời giải chi tiết
+                            </h3>
+                            
+                            <p class="font-semibold text-amber-700">Câu a: Tính các góc còn lại</p>
+                            <p>Ta có $\widehat{PAM}$ và $\widehat{QAN}$ là hai góc đối đỉnh, do đó:</p>
+                            <div class="math-container">
+                                $$ \widehat{QAN} = \widehat{PAM} = 33^{\circ} $$
+                            </div>
+                            
+                            <p>Vì $\widehat{PAN}$ và $\widehat{PAM}$ là hai góc kề bù, nên tổng của chúng bằng $180^{\circ}$:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{PAN} + \widehat{PAM} &= 180^{\circ} \\
+                                \widehat{PAN} + 33^{\circ} &= 180^{\circ} \\
+                                \widehat{PAN} &= 180^{\circ} - 33^{\circ} = 147^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+                            
+                            <p>Mặt khác, $\widehat{QAM}$ và $\widehat{PAN}$ là hai góc đối đỉnh, nên:</p>
+                            <div class="math-container">
+                                $$ \widehat{QAM} = \widehat{PAN} = 147^{\circ} $$
+                            </div>
+
+                            <hr class="my-6 border-slate-200">
+                            
+                            <p class="font-semibold text-amber-700">Câu b: Tính góc và chứng minh tia phân giác</p>
+                            <p>Vì $At$ là tia phân giác của $\widehat{PAN}$, ta có:</p>
+                            <div class="math-container">
+                                $$ \widehat{PAt} = \widehat{tAN} = \frac{\widehat{PAN}}{2} = \frac{147^{\circ}}{2} = 73,5^{\circ} $$
+                            </div>
+                            
+                            <p>Do $\widehat{tAQ}$ và $\widehat{PAt}$ là hai góc kề bù, ta có:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{tAQ} + \widehat{PAt} &= 180^{\circ} \\
+                                \widehat{tAQ} + 73,5^{\circ} &= 180^{\circ} \\
+                                \widehat{tAQ} &= 180^{\circ} - 73,5^{\circ} = 106,5^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+
+                            <p>Vẽ tia $At'$ là tia đối của tia $At$. Khi đó, $\widehat{QAt'}$ và $\widehat{PAt}$ là hai góc đối đỉnh:</p>
+                            <div class="math-container">
+                                $$ \widehat{QAt'} = \widehat{PAt} = 73,5^{\circ} $$
+                            </div>
+                            
+                            <p>Tương tự, $\widehat{MAt'}$ và $\widehat{tAN}$ là hai góc đối đỉnh:</p>
+                            <div class="math-container">
+                                $$ \widehat{MAt'} = \widehat{tAN} = 73,5^{\circ} $$
+                            </div>
+                            
+                            <p>Từ đó suy ra $\widehat{QAt'} = \widehat{MAt'} = 73,5^{\circ}$.</p>
+                            <p>Mặt khác, tia $At'$ nằm giữa hai tia $AM$ và $AQ$. Do vậy, $At'$ là tia phân giác của $\widehat{MAQ}$.</p>
+
+                            <canvas id="canvasBai7_A" width="400" height="250" class="bg-white border border-slate-200 p-2 mt-4"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-10">
+            <div class="bg-indigo-50 border-b border-indigo-100 px-6 py-4">
+                <h2 class="text-xl font-bold text-indigo-800">Bài 8</h2>
+            </div>
+            <div class="p-6 text-lg text-slate-700">
+                <div class="mb-4 space-y-2">
+                    <p>Cho đường thẳng $xy$ đi qua điểm $O$. Vẽ tia $Oz$ sao cho $\widehat{xOz}=135^{\circ}$. Vẽ tia $Ot$ sao cho $\widehat{yOt}=90^{\circ}$ và $\widehat{zOt}=135^{\circ}$. Gọi $Ov$ là tia phân giác của $\widehat{xOt}$. Các góc $\widehat{xOv}$ và $\widehat{yOz}$ có phải là hai góc đối đỉnh không? Vì sao?</p>
+                </div>
+                
+                <button onclick="toggleSolution(this, 'sol8')" class="mt-4 inline-flex items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 rounded-xl font-medium transition-colors">
+                    <span>Xem lời giải</span>
+                    <svg class="w-5 h-5 chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div id="sol8" class="accordion-content">
+                    <div class="accordion-inner">
+                        <div class="mt-5 p-5 md:p-6 bg-slate-50 rounded-xl border border-slate-100 solution-text">
+                            <canvas id="canvasBai8" width="400" height="250" class="bg-white border border-slate-200 p-2 mb-6"></canvas>
+                            
+                            <p>Vì đường thẳng $xy$ đi qua $O$ nên $Ox$ và $Oy$ là hai tia đối nhau. Góc $\widehat{xOy}$ là góc bẹt ($180^{\circ}$).</p>
+                            <p>Theo đề bài $\widehat{yOt} = 90^{\circ}$, suy ra tia $Ot$ vuông góc với đường thẳng $xy$. Do đó:</p>
+                            <div class="math-container">
+                                $$ \widehat{xOt} = 180^{\circ} - \widehat{yOt} = 180^{\circ} - 90^{\circ} = 90^{\circ} $$
+                            </div>
+                            
+                            <p>Tia $Ov$ là phân giác của $\widehat{xOt}$, ta có:</p>
+                            <div class="math-container">
+                                $$ \widehat{xOv} = \widehat{vOt} = \frac{\widehat{xOt}}{2} = \frac{90^{\circ}}{2} = 45^{\circ} $$
+                            </div>
+                            
+                            <p>Tính tổng số đo của $\widehat{xOv}$ và $\widehat{xOz}$:</p>
+                            <div class="math-container">
+                                $$
+                                \begin{aligned}
+                                \widehat{xOv} + \widehat{xOz} &= 45^{\circ} + 135^{\circ} \\
+                                &= 180^{\circ}
+                                \end{aligned}
+                                $$
+                            </div>
+                            
+                            <p>Tổng hai góc kề nhau bằng $180^{\circ}$ chứng tỏ hai tia $Ov$ và $Oz$ là hai tia đối nhau.</p>
+                            
+                            <p class="font-bold text-slate-900 mt-4">Kết luận:</p>
+                            <p>Hai góc $\widehat{xOv}$ và $\widehat{yOz}$ <strong>là hai góc đối đỉnh</strong> bởi vì:</p>
+                            <ul class="list-disc pl-6 space-y-1">
+                                <li>Tia $Ox$ là tia đối của tia $Oy$.</li>
+                                <li>Tia $Ov$ là tia đối của tia $Oz$.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleSolution(btnElement, solutionId) {
+            const content = document.getElementById(solutionId);
+            const chevron = btnElement.querySelector('.chevron');
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                chevron.classList.remove('rotate-180');
+            } else {
+                content.classList.add('open');
+                chevron.classList.add('rotate-180');
+            }
+        }
+
+        function drawRay(ctx, startX, startY, angleDeg, length, label, color = "#1e293b", isDashed = false) {
+            const rad = angleDeg * Math.PI / 180;
+            const endX = startX + length * Math.cos(rad);
+            const endY = startY - length * Math.sin(rad); 
+            
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2.5;
+            
+            if (isDashed) ctx.setLineDash([6, 6]);
+            else ctx.setLineDash([]);
+            
+            ctx.stroke();
+
+            ctx.fillStyle = color;
+            ctx.font = "italic 600 16px Inter";
+            const textOffsetX = Math.cos(rad) * 15;
+            const textOffsetY = -Math.sin(rad) * 15;
+            ctx.fillText(label, endX + textOffsetX - 5, endY + textOffsetY + 5);
+        }
+
+        function drawArc(ctx, x, y, radius, startAngle, endAngle, color = "#ef4444", fill = false) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, -endAngle * Math.PI/180, -startAngle * Math.PI/180);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            if (fill) {
+                ctx.lineTo(x, y);
+                ctx.fillStyle = color + "25";
+                ctx.fill();
+            }
+        }
+
+        function setupCanvas(id) {
+            const canvas = document.getElementById(id);
+            if (!canvas) return null;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            return ctx;
+        }
+
+        window.onload = function() {
+            // Bài 1 - Hình cánh diều ABCD
+            const ctx1 = setupCanvas('canvasBai1');
+            if (ctx1) {
+                ctx1.save();
+                ctx1.translate(150, 140);
+                
+                // Tọa độ các đỉnh (O là tâm)
+                const A = {x: -110, y: 0}, C = {x: 80, y: 0}, B = {x: 0, y: -90}, D = {x: 0, y: 110}, O = {x:0, y:0};
+                
+                // Vẽ và tô màu 4 tam giác
+                // 1. ABO (Xanh nhạt)
+                ctx1.beginPath(); ctx1.moveTo(A.x, A.y); ctx1.lineTo(B.x, B.y); ctx1.lineTo(O.x, O.y); ctx1.closePath();
+                ctx1.fillStyle = "#bae6fd"; ctx1.fill(); ctx1.stroke();
+                
+                // 2. BCO (Vàng)
+                ctx1.beginPath(); ctx1.moveTo(B.x, B.y); ctx1.lineTo(C.x, C.y); ctx1.lineTo(O.x, O.y); ctx1.closePath();
+                ctx1.fillStyle = "#fde047"; ctx1.fill(); ctx1.stroke();
+                
+                // 3. CDO (Hồng nhạt)
+                ctx1.beginPath(); ctx1.moveTo(C.x, C.y); ctx1.lineTo(D.x, D.y); ctx1.lineTo(O.x, O.y); ctx1.closePath();
+                ctx1.fillStyle = "#fecaca"; ctx1.fill(); ctx1.stroke();
+                
+                // 4. ADO (Vàng chanh)
+                ctx1.beginPath(); ctx1.moveTo(A.x, A.y); ctx1.lineTo(D.x, D.y); ctx1.lineTo(O.x, O.y); ctx1.closePath();
+                ctx1.fillStyle = "#d9f99d"; ctx1.fill(); ctx1.stroke();
+
+                // Vẽ 2 đường chéo đậm
+                ctx1.beginPath(); ctx1.moveTo(A.x, A.y); ctx1.lineTo(C.x, C.y);
+                ctx1.moveTo(B.x, B.y); ctx1.lineTo(D.x, D.y);
+                ctx1.strokeStyle = "#1e293b"; ctx1.lineWidth = 1.5; ctx1.stroke();
+
+                // Tính toán góc chính xác cho cung phân giác
+                const rB = 22;
+                const angleBC = Math.atan2(C.y - B.y, C.x - B.x);
+                const angleBO = Math.atan2(O.y - B.y, O.x - B.x);
+                const angleBA = Math.atan2(A.y - B.y, A.x - B.x);
+
+                // Vẽ cung phân giác góc B
+                ctx1.beginPath(); ctx1.arc(B.x, B.y, rB, angleBC, angleBO, false); ctx1.stroke();
+                ctx1.beginPath(); ctx1.arc(B.x, B.y, rB, angleBO, angleBA, false); ctx1.stroke();
+                
+                // Ký hiệu bằng nhau góc B
+                const midRightB = (angleBC + angleBO) / 2;
+                ctx1.beginPath(); 
+                ctx1.moveTo(B.x + (rB - 5) * Math.cos(midRightB), B.y + (rB - 5) * Math.sin(midRightB)); 
+                ctx1.lineTo(B.x + (rB + 5) * Math.cos(midRightB), B.y + (rB + 5) * Math.sin(midRightB)); 
+                ctx1.stroke();
+
+                const midLeftB = (angleBO + angleBA) / 2;
+                ctx1.beginPath(); 
+                ctx1.moveTo(B.x + (rB - 5) * Math.cos(midLeftB), B.y + (rB - 5) * Math.sin(midLeftB)); 
+                ctx1.lineTo(B.x + (rB + 5) * Math.cos(midLeftB), B.y + (rB + 5) * Math.sin(midLeftB)); 
+                ctx1.stroke();
+
+                // Tính toán góc chính xác cho góc D
+                const rD = 22;
+                const angleDA = Math.atan2(A.y - D.y, A.x - D.x);
+                const angleDO = Math.atan2(O.y - D.y, O.x - D.x);
+                const angleDC = Math.atan2(C.y - D.y, C.x - D.x);
+
+                // Vẽ cung phân giác góc D
+                ctx1.beginPath(); ctx1.arc(D.x, D.y, rD, angleDA, angleDO, false); ctx1.stroke();
+                ctx1.beginPath(); ctx1.arc(D.x, D.y, rD, angleDO, angleDC, false); ctx1.stroke();
+
+                // Chữ cái
+                ctx1.fillStyle = "#0f172a"; ctx1.font="bold 16px Inter";
+                ctx1.fillText("A", A.x - 20, A.y + 5); ctx1.fillText("C", C.x + 10, C.y + 5);
+                ctx1.fillText("B", B.x - 5, B.y - 12); ctx1.fillText("D", D.x - 5, D.y + 24);
+                ctx1.fillText("O", O.x + 5, O.y + 15);
+                ctx1.restore();
+            }
+
+            // Bài 2 - Vẽ góc 110
+            const ctx2 = setupCanvas('canvasBai2');
+            if (ctx2) {
+                drawRay(ctx2, 80, 200, 0, 250, "x");
+                drawRay(ctx2, 80, 200, 110, 200, "y");
+                drawRay(ctx2, 80, 200, 55, 200, "z", "#2563eb", true);
+                drawArc(ctx2, 80, 200, 40, 0, 110, "#1e293b", true);
+                ctx2.fillText("O", 65, 220);
+                ctx2.fillText("110°", 125, 170);
+            }
+
+            // Bài 3 - Vẽ tia đối, góc 60
+            const ctx3 = setupCanvas('canvasBai3');
+            if (ctx3) {
+                drawRay(ctx3, 200, 180, 0, 160, "x");
+                drawRay(ctx3, 200, 180, 60, 160, "y");
+                drawRay(ctx3, 200, 180, 180, 160, "m");
+                drawRay(ctx3, 200, 180, 30, 160, "t", "#2563eb", true); 
+                drawArc(ctx3, 200, 180, 45, 0, 60, "#1e293b", true);
+                ctx3.fillText("O", 195, 205);
+                ctx3.fillText("60°", 255, 165);
+            }
+
+            // Bài 4 - Góc 142
+            const ctx4 = setupCanvas('canvasBai4');
+            if (ctx4) {
+                drawRay(ctx4, 180, 180, 0, 180, "x");
+                drawRay(ctx4, 180, 180, 180, 140, "x'");
+                drawRay(ctx4, 180, 180, 142, 170, "y");
+                drawRay(ctx4, 180, 180, 71, 170, "z", "#2563eb");
+                drawArc(ctx4, 180, 180, 40, 0, 142, "#1e293b", true);
+                ctx4.fillText("O", 175, 200);
+            }
+
+            // Bài 5 - Góc 120
+            const ctx5 = setupCanvas('canvasBai5');
+            if (ctx5) {
+                drawRay(ctx5, 200, 180, 0, 160, "x");
+                drawRay(ctx5, 200, 180, 180, 160, "x'");
+                drawRay(ctx5, 200, 180, 120, 160, "y");
+                drawRay(ctx5, 200, 180, 60, 160, "z", "#2563eb"); 
+                drawRay(ctx5, 200, 180, 150, 160, "z'", "#10b981"); 
+                drawArc(ctx5, 200, 180, 35, 0, 120, "#1e293b");
+                drawArc(ctx5, 200, 180, 25, 60, 150, "#ef4444", true);
+                ctx5.fillText("O", 195, 200);
+            }
+
+            // Bài 6 - Góc bẹt
+            const ctx6 = setupCanvas('canvasBai6');
+            if (ctx6) {
+                drawRay(ctx6, 200, 180, 0, 160, "y");
+                drawRay(ctx6, 200, 180, 180, 160, "x");
+                drawRay(ctx6, 200, 180, 90, 140, "z", "#ef4444");
+                drawRay(ctx6, 200, 180, 135, 140, "t", "#0ea5e9");
+                drawRay(ctx6, 200, 180, 45, 140, "v", "#22c55e");
+                drawArc(ctx6, 200, 180, 40, 45, 135, "#1e293b");
+                ctx6.fillText("O", 195, 205);
+            }
+
+            // Bài 7 - Đề
+            const ctx7Q = setupCanvas('canvasBai7_Q');
+            if (ctx7Q) {
+                drawRay(ctx7Q, 200, 100, 15, 160, "N");
+                drawRay(ctx7Q, 200, 100, 195, 160, "M");
+                drawRay(ctx7Q, 200, 100, 162, 160, "P");
+                drawRay(ctx7Q, 200, 100, -18, 160, "Q");
+                drawArc(ctx7Q, 200, 100, 45, 162, 195, "#ef4444", true);
+                ctx7Q.fillText("A", 195, 85);
+                ctx7Q.fillText("33°", 145, 115);
+            }
+
+            // Bài 7 - Lời giải
+            const ctx7A = setupCanvas('canvasBai7_A');
+            if (ctx7A) {
+                drawRay(ctx7A, 200, 125, 15, 160, "N");
+                drawRay(ctx7A, 200, 125, 195, 160, "M");
+                drawRay(ctx7A, 200, 125, 162, 160, "P");
+                drawRay(ctx7A, 200, 125, -18, 160, "Q");
+                drawRay(ctx7A, 200, 125, 88.5, 130, "t", "#2563eb"); 
+                drawRay(ctx7A, 200, 125, 268.5, 130, "t'", "#ef4444"); 
+                ctx7A.fillText("A", 210, 115);
+            }
+
+            // Bài 8
+            const ctx8 = setupCanvas('canvasBai8');
+            if (ctx8) {
+                drawRay(ctx8, 200, 150, 0, 160, "y");
+                drawRay(ctx8, 200, 150, 180, 160, "x");
+                drawRay(ctx8, 200, 150, 270, 130, "t"); 
+                drawRay(ctx8, 200, 150, 45, 140, "z");  
+                drawRay(ctx8, 200, 150, 225, 140, "v", "#2563eb"); 
+                
+                // Góc vuông
+                ctx8.beginPath();
+                ctx8.rect(200, 150, 15, 15);
+                ctx8.strokeStyle = "#ef4444";
+                ctx8.stroke();
+                
+                ctx8.fillText("O", 185, 140);
+            }
+        };
+    </script>
+</body>
+</html>
