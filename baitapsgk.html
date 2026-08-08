@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Học Tập - Toán 7</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Load MathJax for rendering math formulas -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .solution-content {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        
+        <!-- Header -->
+        <header class="bg-white rounded-t-2xl shadow-sm p-6 border-b-4 border-blue-500 mb-6 flex flex-col items-center justify-center text-center">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Phiếu Học Tập Môn Toán</h1>
+            <h2 class="text-xl text-blue-600 font-semibold">Chủ đề: Góc ở vị trí đặc biệt, Tia phân giác của một góc</h2>
+            <p class="text-gray-500 mt-2 italic text-sm">Hướng dẫn: Học sinh đọc kỹ đề bài, làm ra nháp trước khi bấm nút xem gợi ý.</p>
+        </header>
+
+        <!-- Bài 3.1 -->
+        <div class="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+            <div class="bg-blue-50 p-4 border-b border-blue-100 flex items-center justify-between">
+                <h3 class="font-bold text-lg text-blue-800">Bài 3.1 (Trang 45)</h3>
+                <span class="px-3 py-1 bg-blue-200 text-blue-800 text-xs font-bold rounded-full">Góc kề bù</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4 font-medium">Yêu cầu: Cho Hình 3.13, hãy kể tên các cặp góc kề bù.</p>
+                
+                <!-- Hình vẽ 3.13 -->
+                <div class="flex flex-wrap justify-center gap-8 mb-6 bg-gray-50 py-4 rounded-lg border border-gray-100">
+                    <div class="text-center">
+                        <svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="20" y1="90" x2="180" y2="90" stroke="#374151" stroke-width="2"/>
+                            <line x1="100" y1="90" x2="60" y2="20" stroke="#374151" stroke-width="2"/>
+                            <text x="20" y="105" font-family="serif" font-style="italic" fill="#1f2937">m</text>
+                            <text x="170" y="105" font-family="serif" font-style="italic" fill="#1f2937">n</text>
+                            <text x="95" y="110" font-family="serif" font-style="italic" fill="#1f2937">O</text>
+                            <text x="50" y="25" font-family="serif" font-style="italic" fill="#1f2937">x</text>
+                            <text x="100" y="115" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">a)</text>
+                        </svg>
+                    </div>
+                    <div class="text-center">
+                        <svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="100,20 40,90 160,90" fill="none" stroke="#374151" stroke-width="2"/>
+                            <line x1="40" y1="90" x2="130" y2="55" stroke="#374151" stroke-width="2"/>
+                            <text x="95" y="15" font-family="serif" font-style="italic" fill="#1f2937">A</text>
+                            <text x="25" y="95" font-family="serif" font-style="italic" fill="#1f2937">B</text>
+                            <text x="165" y="95" font-family="serif" font-style="italic" fill="#1f2937">C</text>
+                            <text x="135" y="50" font-family="serif" font-style="italic" fill="#1f2937">M</text>
+                            <text x="100" y="115" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">b)</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <button onclick="toggleSolution('sol-1', this)" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    <span>Xem lời giải gợi ý</span>
+                </button>
+
+                <div id="sol-1" class="hidden mt-4 p-5 bg-green-50 border border-green-200 rounded-lg text-gray-700 solution-content">
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Hình a:</strong> Hai góc \(\widehat{mOx}\) và \(\widehat{nOx}\) là hai góc kề bù.
+                            <br><span class="text-sm text-gray-500 italic">Giải thích: Vì điểm \(O\) nằm trên đường thẳng \(mn\), tạo thành hai tia đối nhau là \(Om\) và \(On\).</span>
+                        </li>
+                        <li><strong>Hình b:</strong> Hai góc \(\widehat{AMB}\) và \(\widehat{BMC}\) là hai góc kề bù.
+                            <br><span class="text-sm text-gray-500 italic">Giải thích: Vì điểm \(M\) nằm trên đoạn thẳng \(AC\), tạo thành hai tia đối nhau là \(MA\) và \(MC\).</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài 3.2 -->
+        <div class="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+            <div class="bg-purple-50 p-4 border-b border-purple-100 flex items-center justify-between">
+                <h3 class="font-bold text-lg text-purple-800">Bài 3.2 (Trang 45)</h3>
+                <span class="px-3 py-1 bg-purple-200 text-purple-800 text-xs font-bold rounded-full">Góc đối đỉnh</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4 font-medium">Yêu cầu: Cho Hình 3.14, hãy kể tên các cặp góc đối đỉnh.</p>
+                
+                <!-- Hình vẽ 3.14 -->
+                <div class="flex flex-wrap justify-center gap-8 mb-6 bg-gray-50 py-4 rounded-lg border border-gray-100">
+                    <div class="text-center">
+                        <svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="30" y1="60" x2="170" y2="60" stroke="#374151" stroke-width="2"/>
+                            <line x1="70" y1="20" x2="130" y2="100" stroke="#374151" stroke-width="2"/>
+                            <text x="20" y="65" font-family="serif" font-style="italic" fill="#1f2937">x</text>
+                            <text x="175" y="65" font-family="serif" font-style="italic" fill="#1f2937">m</text>
+                            <text x="60" y="20" font-family="serif" font-style="italic" fill="#1f2937">y</text>
+                            <text x="135" y="110" font-family="serif" font-style="italic" fill="#1f2937">t</text>
+                            <text x="90" y="50" font-family="serif" font-style="italic" fill="#1f2937">H</text>
+                            <text x="100" y="115" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">a)</text>
+                        </svg>
+                    </div>
+                    <div class="text-center">
+                        <svg width="200" height="120" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="60,20 160,20 140,90 40,90" fill="none" stroke="#374151" stroke-width="2"/>
+                            <line x1="60" y1="20" x2="140" y2="90" stroke="#374151" stroke-width="2"/>
+                            <line x1="160" y1="20" x2="40" y2="90" stroke="#374151" stroke-width="2"/>
+                            <text x="50" y="15" font-family="serif" font-style="italic" fill="#1f2937">A</text>
+                            <text x="165" y="15" font-family="serif" font-style="italic" fill="#1f2937">B</text>
+                            <text x="145" y="105" font-family="serif" font-style="italic" fill="#1f2937">C</text>
+                            <text x="25" y="105" font-family="serif" font-style="italic" fill="#1f2937">D</text>
+                            <text x="105" y="45" font-family="serif" font-style="italic" fill="#1f2937">O</text>
+                            <text x="100" y="115" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">b)</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <button onclick="toggleSolution('sol-2', this)" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    <span>Xem lời giải gợi ý</span>
+                </button>
+
+                <div id="sol-2" class="hidden mt-4 p-5 bg-green-50 border border-green-200 rounded-lg text-gray-700 solution-content">
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Hình a:</strong> Hai đường thẳng \(xy\) và \(mt\) cắt nhau tại điểm \(H\). Các cặp góc đối đỉnh là:
+                            <ul class="list-circle pl-5 mt-1">
+                                <li>\(\widehat{xHt}\) và \(\widehat{yHm}\)</li>
+                                <li>\(\widehat{xHm}\) và \(\widehat{yHt}\)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Hình b:</strong> Hai đoạn thẳng \(AC\) và \(BD\) cắt nhau tại điểm \(O\). Các cặp góc đối đỉnh là:
+                            <ul class="list-circle pl-5 mt-1">
+                                <li>\(\widehat{AOB}\) và \(\widehat{COD}\)</li>
+                                <li>\(\widehat{AOD}\) và \(\widehat{BOC}\)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài 3.3 -->
+        <div class="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+            <div class="bg-yellow-50 p-4 border-b border-yellow-100 flex items-center justify-between">
+                <h3 class="font-bold text-lg text-yellow-800">Bài 3.3</h3>
+                <span class="px-3 py-1 bg-yellow-200 text-yellow-800 text-xs font-bold rounded-full">Tổng hợp</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4 font-medium">Yêu cầu: Vẽ góc \(\widehat{xOy}\) có số đo bằng \(60^\circ\). Vẽ tia \(Om\) là tia đối của tia \(Ox\).</p>
+                <ul class="list-none space-y-1 mb-4 text-gray-700">
+                    <li>a) Gọi tên hai góc kề bù có trong hình vừa vẽ.</li>
+                    <li>b) Tính số đo góc \(\widehat{yOm}\).</li>
+                    <li>c) Vẽ tia \(Ot\) là tia phân giác của góc \(\widehat{xOy}\). Tính số đo các góc \(\widehat{tOy}\) và \(\widehat{tOm}\).</li>
+                </ul>
+                
+                <button onclick="toggleSolution('sol-3', this)" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    <span>Xem lời giải gợi ý</span>
+                </button>
+
+                <div id="sol-3" class="hidden mt-4 p-5 bg-green-50 border border-green-200 rounded-lg text-gray-700 solution-content">
+                    <div class="space-y-3">
+                        <p><strong>a)</strong> Hai góc kề bù có trong hình là: \(\widehat{xOy}\) và \(\widehat{yOm}\).</p>
+                        <p><strong>b)</strong> Vì \(\widehat{xOy}\) và \(\widehat{yOm}\) là hai góc kề bù nên tổng số đo của chúng bằng \(180^\circ\).</p>
+                        <p class="pl-4 border-l-2 border-green-300">
+                            Ta có: \(\widehat{xOy} + \widehat{yOm} = 180^\circ\) <br>
+                            Thay số ta được: \(60^\circ + \widehat{yOm} = 180^\circ\) <br>
+                            Từ đó suy ra: \(\widehat{yOm} = 180^\circ - 60^\circ = 120^\circ\)
+                        </p>
+                        <p><strong>c)</strong> Vì \(Ot\) là tia phân giác của \(\widehat{xOy}\) nên: 
+                            <br>\(\widehat{tOy} = \widehat{xOt} = \frac{\widehat{xOy}}{2} = \frac{60^\circ}{2} = 30^\circ\).
+                        </p>
+                        <p>
+                            Góc \(\widehat{tOm}\) và góc \(\widehat{xOt}\) là hai góc kề bù (do \(Om\) và \(Ox\) là hai tia đối nhau), nên:
+                        </p>
+                        <p class="pl-4 border-l-2 border-green-300">
+                            Ta có: \(\widehat{tOm} + \widehat{xOt} = 180^\circ\) <br>
+                            Thay số ta được: \(\widehat{tOm} + 30^\circ = 180^\circ\) <br>
+                            Do đó: \(\widehat{tOm} = 180^\circ - 30^\circ = 150^\circ\)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài 3.4 -->
+        <div class="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+            <div class="bg-red-50 p-4 border-b border-red-100 flex items-center justify-between">
+                <h3 class="font-bold text-lg text-red-800">Bài 3.4 (Trang 45)</h3>
+                <span class="px-3 py-1 bg-red-200 text-red-800 text-xs font-bold rounded-full">Tính số đo góc</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4 font-medium">Yêu cầu: Cho Hình 3.15a, biết \(\widehat{DMA} = 45^\circ\). Tính số đo góc \(\widehat{DMB}\).</p>
+                
+                <!-- Hình vẽ 3.15a -->
+                <div class="flex justify-center mb-6 bg-gray-50 py-4 rounded-lg border border-gray-100">
+                    <svg width="250" height="120" viewBox="0 0 250 120" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="30" y1="90" x2="220" y2="90" stroke="#374151" stroke-width="2"/>
+                        <line x1="100" y1="90" x2="50" y2="20" stroke="#374151" stroke-width="2"/>
+                        <!-- Cung tròn góc 45 độ -->
+                        <path d="M 80 90 A 20 20 0 0 1 85 73" fill="none" stroke="#2563eb" stroke-width="1.5" />
+                        <text x="55" y="85" font-family="sans-serif" font-size="12" fill="#2563eb" font-weight="bold">45°</text>
+                        
+                        <text x="20" y="105" font-family="serif" font-style="italic" fill="#1f2937">A</text>
+                        <text x="225" y="105" font-family="serif" font-style="italic" fill="#1f2937">B</text>
+                        <text x="105" y="105" font-family="serif" font-style="italic" fill="#1f2937">M</text>
+                        <text x="40" y="15" font-family="serif" font-style="italic" fill="#1f2937">D</text>
+                        <text x="125" y="115" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Hình 3.15a</text>
+                    </svg>
+                </div>
+
+                <button onclick="toggleSolution('sol-4', this)" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    <span>Xem lời giải gợi ý</span>
+                </button>
+
+                <div id="sol-4" class="hidden mt-4 p-5 bg-green-50 border border-green-200 rounded-lg text-gray-700 solution-content">
+                    <p class="mb-2">Quan sát hình vẽ, ta thấy ba điểm \(A, M, B\) thẳng hàng, do đó tia \(MA\) và tia \(MB\) là hai tia đối nhau. Từ đó suy ra \(\widehat{DMA}\) và \(\widehat{DMB}\) là hai góc kề bù.</p>
+                    <div class="pl-4 border-l-2 border-green-300 font-medium text-gray-800">
+                        Ta có: \(\widehat{DMA} + \widehat{DMB} = 180^\circ\) <br>
+                        Thay số ta được: \(45^\circ + \widehat{DMB} = 180^\circ\) <br>
+                        Từ đó suy ra: \(\widehat{DMB} = 180^\circ - 45^\circ = 135^\circ\)
+                    </div>
+                    <p class="mt-2 text-green-700 font-bold">Vậy \(\widehat{DMB} = 135^\circ\).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bài 3.5 -->
+        <div class="bg-white rounded-xl shadow-sm mb-6 overflow-hidden">
+            <div class="bg-indigo-50 p-4 border-b border-indigo-100 flex items-center justify-between">
+                <h3 class="font-bold text-lg text-indigo-800">Bài 3.5 (Trang 45)</h3>
+                <span class="px-3 py-1 bg-indigo-200 text-indigo-800 text-xs font-bold rounded-full">Tính toán đa góc</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700 mb-4 font-medium">Yêu cầu: Cho Hình 3.15b, biết \(\widehat{xBm} = 36^\circ\). Tính số đo các góc còn lại trong hình vẽ.</p>
+                
+                <!-- Hình vẽ 3.15b -->
+                <div class="flex justify-center mb-6 bg-gray-50 py-4 rounded-lg border border-gray-100">
+                    <svg width="250" height="120" viewBox="0 0 250 120" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="30" y1="60" x2="220" y2="60" stroke="#374151" stroke-width="2"/>
+                        <line x1="70" y1="100" x2="180" y2="20" stroke="#374151" stroke-width="2"/>
+                        <!-- Cung tròn góc 36 độ -->
+                        <path d="M 155 60 A 25 25 0 0 0 148 48" fill="none" stroke="#2563eb" stroke-width="1.5" />
+                        <text x="160" y="55" font-family="sans-serif" font-size="12" fill="#2563eb" font-weight="bold">36°</text>
+
+                        <text x="20" y="55" font-family="serif" font-style="italic" fill="#1f2937">y</text>
+                        <text x="225" y="75" font-family="serif" font-style="italic" fill="#1f2937">x</text>
+                        <text x="185" y="15" font-family="serif" font-style="italic" fill="#1f2937">m</text>
+                        <text x="60" y="105" font-family="serif" font-style="italic" fill="#1f2937">n</text>
+                        <text x="125" y="75" font-family="serif" font-style="italic" fill="#1f2937">B</text>
+                        <text x="125" y="115" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">Hình 3.15b</text>
+                    </svg>
+                </div>
+
+                <button onclick="toggleSolution('sol-5', this)" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                    <span>Xem lời giải gợi ý</span>
+                </button>
+
+                <div id="sol-5" class="hidden mt-4 p-5 bg-green-50 border border-green-200 rounded-lg text-gray-700 solution-content space-y-4">
+                    <div>
+                        <strong class="text-gray-800">1. Tính \(\widehat{yBn}\):</strong>
+                        <p>Góc \(\widehat{yBn}\) và \(\widehat{xBm}\) là hai góc đối đỉnh nên: <br>
+                        <span class="font-bold text-indigo-600">\(\widehat{yBn} = \widehat{xBm} = 36^\circ\)</span>.</p>
+                    </div>
+                    
+                    <div class="pt-3 border-t border-green-200">
+                        <strong class="text-gray-800">2. Tính \(\widehat{xBn}\):</strong>
+                        <p>Góc \(\widehat{xBn}\) và \(\widehat{xBm}\) là hai góc kề bù nên:</p>
+                        <div class="pl-4 border-l-2 border-green-300">
+                            Ta có: \(\widehat{xBn} + \widehat{xBm} = 180^\circ\) <br>
+                            Thay số ta được: \(\widehat{xBn} + 36^\circ = 180^\circ\) <br>
+                            <span class="font-bold text-indigo-600">Từ đó tính được: \(\widehat{xBn} = 180^\circ - 36^\circ = 144^\circ\)</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-green-200">
+                        <strong class="text-gray-800">3. Tính \(\widehat{yBm}\):</strong>
+                        <p>Góc \(\widehat{yBm}\) và \(\widehat{xBn}\) là hai góc đối đỉnh nên: <br>
+                        <span class="font-bold text-indigo-600">\(\widehat{yBm} = \widehat{xBn} = 144^\circ\)</span>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /**
+         * Hàm điều khiển việc ẩn/hiện lời giải và đổi trạng thái nút bấm
+         */
+        function toggleSolution(elementId, btnElement) {
+            const solutionDiv = document.getElementById(elementId);
+            
+            // Icon cho nút Đóng (Eye off)
+            const iconClose = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>`;
+            // Icon cho nút Mở (Eye open)
+            const iconOpen = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>`;
+
+            if (solutionDiv.classList.contains('hidden')) {
+                // Hiện lời giải
+                solutionDiv.classList.remove('hidden');
+                
+                // Đổi nút thành màu đỏ và đổi chữ
+                btnElement.innerHTML = iconClose + '<span>Ẩn lời giải</span>';
+                btnElement.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                btnElement.classList.add('bg-red-500', 'hover:bg-red-600');
+            } else {
+                // Ẩn lời giải
+                solutionDiv.classList.add('hidden');
+                
+                // Đổi nút lại màu xanh và đổi chữ
+                btnElement.innerHTML = iconOpen + '<span>Xem lời giải gợi ý</span>';
+                btnElement.classList.remove('bg-red-500', 'hover:bg-red-600');
+                btnElement.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            }
+        }
+    </script>
+</body>
+</html>
