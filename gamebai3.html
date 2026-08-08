@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đảo Giấu Vàng: Truy Tìm Kho Báu Toán Học</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Nunito', sans-serif; 
+            background: linear-gradient(135deg, #0ea5e9, #0284c7, #0369a1);
+            background-size: 400% 400%;
+            animation: wave 15s ease infinite;
+        }
+        h1, h2, h3, .font-heading { font-family: 'Fredoka', sans-serif; }
+        
+        @keyframes wave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+
+        .parchment {
+            background-color: #fef3c7; /* amber-100 */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+            border: 2px solid #b45309;
+            box-shadow: inset 0 0 20px rgba(180, 83, 9, 0.1), 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .game-btn {
+            box-shadow: 0 4px 0 0 #991b1b;
+            transition: all 0.1s;
+        }
+        .game-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 0 #991b1b;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 flex justify-center items-center min-h-screen text-slate-800">
+
+    <div id="gameContainer" class="w-full max-w-3xl parchment rounded-3xl overflow-hidden relative border-4 border-amber-700">
+        
+        <!-- Screen 1: Welcome -->
+        <div id="screenWelcome" class="p-8 md:p-12 text-center fade-in">
+            <div class="text-7xl mb-4 animate-bounce">🏴‍☠️</div>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-amber-900 mb-2 drop-shadow-sm font-heading tracking-wide">Đảo Giấu Vàng</h1>
+            <p class="text-lg text-amber-800 font-bold mb-8 opacity-90">Truy Tìm Kho Báu: Góc & Tia Phân Giác</p>
+            
+            <div class="bg-amber-50/60 p-6 rounded-2xl border-2 border-amber-200 border-dashed max-w-lg mx-auto mb-8">
+                <p class="text-amber-900 mb-4 font-semibold text-left">📜 Luật đi biển:</p>
+                <ul class="text-left text-sm space-y-2 text-amber-800">
+                    <li>✔️ 10 hòn đảo tương ứng với 10 câu đố. Quỹ thời gian mỗi đảo là <b>60 giây</b>.</li>
+                    <li>🪙 Trả lời đúng ngay lần đầu nhận <b>+10 Vàng</b>.</li>
+                    <li>⛈️ Trả lời sai (hoặc hết giờ), thuyền trưởng bị <b>trừ 5 Vàng</b> và phải làm câu hỏi phụ để vượt qua giông bão.</li>
+                    <li>👑 Đạt từ 80 Vàng trở lên để nhận <b>Mã Kho Báu</b> bí mật.</li>
+                </ul>
+            </div>
+            
+            <input type="text" id="playerNameInput" placeholder="Nhập tên thuyền trưởng..." class="w-full max-w-md px-5 py-4 rounded-xl border-4 border-amber-300 bg-white focus:border-amber-500 focus:outline-none text-center mb-6 text-xl font-bold placeholder-slate-400">
+            
+            <button onclick="startGame()" class="game-btn block w-full max-w-md mx-auto bg-red-600 hover:bg-red-500 text-white font-heading text-2xl py-4 px-6 rounded-2xl">
+                Nhổ Neo Ra Khơi! ⚓
+            </button>
+        </div>
+
+        <!-- Screen 2: Game -->
+        <div id="screenGame" class="hidden fade-in flex flex-col h-full">
+            <!-- Header Bar -->
+            <div class="bg-amber-900 text-amber-50 px-4 py-3 flex flex-wrap justify-between items-center gap-2 border-b-4 border-amber-950">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">👨‍✈️</span>
+                    <div>
+                        <p class="text-xs text-amber-300 font-bold uppercase">Thuyền trưởng</p>
+                        <p id="displayPlayerName" class="font-heading text-lg leading-none"></p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <div class="text-center">
+                        <p class="text-xs text-amber-300 font-bold uppercase">Thời gian</p>
+                        <p id="timerDisplay" class="font-heading text-2xl text-white leading-none">60s</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-amber-300 font-bold uppercase">Kho vàng</p>
+                        <p class="font-heading text-2xl text-yellow-400 leading-none"><span id="scoreDisplay">0</span> 🪙</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Progress -->
+            <div class="px-6 pt-4 pb-2 bg-amber-100/50">
+                <div class="flex justify-between items-center relative">
+                    <div class="absolute left-0 top-1/2 w-full h-1 bg-amber-300 -z-10 transform -translate-y-1/2 rounded-full border-t border-amber-400"></div>
+                    <!-- Các chấm đảo sẽ được render bằng JS -->
+                    <div id="mapProgress" class="flex justify-between w-full z-10"></div>
+                </div>
+            </div>
+
+            <!-- Toast Notification (Wooden board style) -->
+            <div id="toastMessage" class="hidden mx-6 mt-4 p-4 rounded-xl font-bold text-center border-2 shadow-lg transition-all transform scale-100 relative overflow-hidden z-20">
+                <span id="toastIcon" class="text-2xl mr-2 align-middle"></span>
+                <span id="toastText" class="align-middle"></span>
+            </div>
+
+            <!-- Question Area -->
+            <div class="p-6 md:p-8 flex-1 flex flex-col justify-center">
+                <div id="badgeSimilar" class="hidden mb-4 mx-auto w-fit px-4 py-1.5 bg-red-100 border-2 border-red-300 text-red-800 text-sm font-bold rounded-full uppercase tracking-widest font-heading shadow-sm flex items-center gap-2">
+                    <span>⛈️</span> Đảo Giông Bão (Câu hỏi phụ - Không tính điểm)
+                </div>
+                
+                <div class="bg-white/80 p-6 rounded-2xl border-2 border-amber-200 shadow-inner mb-6 relative">
+                    <div class="absolute -top-3 -left-3 text-3xl">📌</div>
+                    <h2 id="questionText" class="text-xl md:text-2xl text-slate-800 leading-relaxed font-semibold">
+                        <!-- Nội dung câu hỏi -->
+                    </h2>
+                </div>
+
+                <div class="flex items-center gap-4 max-w-md mx-auto w-full">
+                    <input type="number" id="answerInput" placeholder="Nhập số đo..." class="flex-1 px-5 py-4 rounded-2xl border-4 border-amber-400 focus:border-amber-600 bg-white focus:outline-none text-2xl font-bold text-slate-800 text-center placeholder-slate-300 shadow-inner">
+                    <span class="text-4xl text-amber-700 font-bold">&deg;</span>
+                </div>
+
+                <button id="submitBtn" onclick="submitAnswer()" class="game-btn mt-6 w-full max-w-md mx-auto bg-green-600 hover:bg-green-500 text-white font-heading text-2xl py-4 rounded-2xl shadow-lg border-green-800 border-b-4">
+                    Mở Khóa Đảo 🗝️
+                </button>
+            </div>
+            
+            <!-- Explanation Modal (Sổ tay lời giải) -->
+            <div id="explanationModal" class="hidden absolute inset-0 z-50 flex items-center justify-center bg-slate-900/80 p-4 backdrop-blur-sm">
+                <div class="bg-amber-50 p-6 md:p-8 rounded-3xl w-full max-w-lg border-4 border-amber-600 shadow-2xl relative">
+                    <div class="flex items-center gap-3 mb-4 border-b-2 border-amber-200 pb-3">
+                        <span class="text-4xl animate-bounce">💡</span>
+                        <h3 class="text-2xl font-bold text-amber-900 font-heading">Sổ tay Thuyền trưởng</h3>
+                    </div>
+                    <p id="explanationText" class="text-slate-800 text-lg mb-6 leading-relaxed"></p>
+                    <button onclick="closeExplanation()" class="game-btn w-full bg-blue-600 hover:bg-blue-500 text-white font-heading text-xl py-3 rounded-xl shadow-md border-b-4 border-blue-800 transition-all">
+                        Đã hiểu, đi tiếp thôi! ⛵
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Screen 3: Result -->
+        <div id="screenResult" class="hidden p-8 md:p-12 text-center fade-in">
+            <div id="resultIcon" class="text-8xl mb-6 animate-bounce"></div>
+            <h1 id="resultTitle" class="text-4xl md:text-5xl font-extrabold text-amber-900 mb-4 font-heading"></h1>
+            <p id="resultSubtitle" class="text-lg text-amber-800 font-semibold mb-8 max-w-xl mx-auto leading-relaxed"></p>
+            
+            <div class="bg-amber-100 rounded-3xl p-6 border-4 border-amber-300 mb-8 inline-block min-w-[250px] shadow-inner relative">
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-amber-500 text-white font-bold px-4 py-1 rounded-full text-sm uppercase tracking-wider border-2 border-amber-700">Tổng Vàng</div>
+                <p id="finalScore" class="text-6xl font-black font-heading text-yellow-600 drop-shadow-md mt-2">0</p>
+            </div>
+
+            <div id="rewardSection" class="hidden max-w-md mx-auto p-6 bg-gradient-to-r from-yellow-100 to-amber-200 border-4 border-yellow-400 rounded-3xl mb-8 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-4 -bottom-4 text-6xl opacity-30">👑</div>
+                
+                <div class="bg-yellow-300 text-yellow-900 font-black px-4 py-2 rounded-xl mb-4 border-2 border-yellow-500 shadow-md inline-flex items-center gap-2">
+                    <span class="text-xl animate-pulse">⭐</span> Đạt trên 80% đúng lần đầu (+1 SAO)
+                </div>
+                
+                <p class="text-sm font-extrabold text-yellow-800 uppercase tracking-widest mb-2 font-heading">Mã Rương Báu Độc Quyền</p>
+                <div class="bg-white px-4 py-3 rounded-xl border-2 border-dashed border-yellow-500 mb-3 inline-block">
+                    <p class="text-3xl font-mono font-black text-red-600 tracking-wider">LSTS-MATH7-PRO</p>
+                </div>
+                <p class="text-sm text-yellow-900 font-bold">🎉 Chụp ảnh màn hình này nộp cho giáo viên để được cộng 1 SAO nhé!</p>
+            </div>
+
+            <button onclick="location.reload()" class="game-btn bg-blue-600 hover:bg-blue-500 text-white font-heading text-xl py-3 px-8 rounded-2xl border-blue-800 border-b-4 inline-flex items-center gap-2">
+                <span>Ra khơi lại từ đầu</span> ⛵
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        let playerName = "";
+        let score = 0;
+        let currentIdx = 0;
+        let isSimilarMode = false;
+        let correctMainAnswers = 0;
+        let questions = [];
+        let timerInterval;
+        let timeLeft = 60;
+
+        // Sinh 10 câu hỏi
+        function generateQuestions() {
+            const q = [];
+            // 1
+            let a1 = Math.floor(Math.random() * 80) + 20;
+            q.push({
+                main: { text: `Hai đường thẳng cắt nhau tạo thành góc <i>xOy</i> = ${a1}&deg;. Góc đối đỉnh với góc <i>xOy</i> có số đo là bao nhiêu độ?`, ans: a1 },
+                similar: { text: `Góc <i>A</i> và góc <i>B</i> là hai góc đối đỉnh. Nếu <i>A</i> = ${a1+15}&deg; thì góc <i>B</i> bằng bao nhiêu độ?`, ans: a1+15, explain: `<b>Ghi nhớ:</b> Hai góc đối đỉnh thì luôn có số đo <b>bằng nhau</b>. Do đó, đáp án chính xác là <b>${a1+15}&deg;</b>.` }
+            });
+            // 2
+            q.push({
+                main: { text: `Hai góc kề bù luôn có tổng số đo bằng bao nhiêu độ?`, ans: 180 },
+                similar: { text: `Góc bẹt có số đo bằng bao nhiêu độ?`, ans: 180, explain: `<b>Ghi nhớ:</b> Hai góc kề bù hợp lại tạo thành một góc bẹt. Góc bẹt luôn có số đo cố định là <b>180&deg;</b>.` }
+            });
+            // 3
+            let a3 = Math.floor(Math.random() * 60) + 30;
+            q.push({
+                main: { text: `Góc <i>A</i> và góc <i>B</i> là hai góc bù nhau. Biết <i>A</i> = ${a3}&deg;. Tính số đo góc <i>B</i>.`, ans: 180 - a3 },
+                similar: { text: `Góc <i>M</i> và <i>N</i> là hai góc bù nhau. Biết <i>N</i> = ${a3+10}&deg;. Tính số đo góc <i>M</i>.`, ans: 180 - (a3+10), explain: `<b>Ghi nhớ:</b> Hai góc bù nhau có tổng số đo bằng 180&deg;. Để tìm góc còn lại, ta lấy <b>180&deg; - ${a3+10}&deg; = ${180-(a3+10)}&deg;</b>.` }
+            });
+            // 4
+            let a4 = (Math.floor(Math.random() * 40) + 20) * 2; 
+            q.push({
+                main: { text: `Tia <i>Ot</i> là tia phân giác của góc <i>xOy</i>. Biết <i>xOy</i> = ${a4}&deg;. Số đo góc <i>xOt</i> là?`, ans: a4 / 2 },
+                similar: { text: `Tia <i>Oz</i> là phân giác của góc <i>mOn</i>. Biết <i>mOn</i> = ${a4-10}&deg;. Số đo góc <i>mOz</i> là?`, ans: (a4-10) / 2, explain: `<b>Ghi nhớ:</b> Tia phân giác chia một góc thành hai góc nhỏ <b>bằng nhau và bằng một nửa</b> góc ban đầu. Ta lấy <b>${a4-10}&deg; : 2 = ${(a4-10)/2}&deg;</b>.` }
+            });
+            // 5
+            let a5 = Math.floor(Math.random() * 70) + 40;
+            q.push({
+                main: { text: `Cho hai góc kề bù <i>xOy</i> và <i>yOz</i>. Biết <i>xOy</i> = ${a5}&deg;. Tính số đo góc <i>yOz</i>.`, ans: 180 - a5 },
+                similar: { text: `Cho hai góc kề bù <i>aOb</i> và <i>bOc</i>. Biết <i>bOc</i> = ${a5-25}&deg;. Tính số đo góc <i>aOb</i>.`, ans: 180 - (a5-25), explain: `<b>Ghi nhớ:</b> Hai góc kề bù có tổng bằng 180&deg;. Để tìm góc kề bù với góc đã cho, ta làm phép trừ: <b>180&deg; - ${a5-25}&deg; = ${180-(a5-25)}&deg;</b>.` }
+            });
+            // 6
+            let a6 = (Math.floor(Math.random() * 30) + 20) * 2; 
+            q.push({
+                main: { text: `Hai góc kề bù <i>xOy</i> và <i>yOz</i>. Biết <i>xOy</i> = ${a6}&deg;. Gọi <i>Ot</i> là tia phân giác của góc <i>yOz</i>. Tính số đo góc <i>yOt</i>.`, ans: (180 - a6) / 2 },
+                similar: { text: `Hai góc kề bù <i>mOn</i> và <i>nOp</i>. Biết <i>mOn</i> = ${a6+10}&deg;. Gọi <i>Oq</i> là tia phân giác của góc <i>nOp</i>. Tính <i>qOp</i>.`, ans: (180 - (a6+10)) / 2, explain: `<b>Bước 1:</b> Tìm góc kề bù còn lại: nOp = 180&deg; - ${a6+10}&deg; = ${180-(a6+10)}&deg;.<br><b>Bước 2:</b> Phân giác chia đôi góc đó: ${180-(a6+10)}&deg; : 2 = <b>${(180-(a6+10))/2}&deg;</b>.` }
+            });
+            // 7
+            let a7_1 = Math.floor(Math.random() * 30) + 20; 
+            let a7_2 = Math.floor(Math.random() * 30) + 20;
+            q.push({
+                main: { text: `Góc <i>xOy</i> và <i>yOz</i> là hai góc kề nhau. Biết <i>xOy</i> = ${a7_1}&deg;, <i>yOz</i> = ${a7_2}&deg;. Tính số đo góc <i>xOz</i>.`, ans: a7_1 + a7_2 },
+                similar: { text: `Góc <i>AOB</i> và <i>BOC</i> kề nhau. Biết <i>AOB</i> = ${a7_1+5}&deg;, <i>BOC</i> = ${a7_2+5}&deg;. Tính góc <i>AOC</i>.`, ans: (a7_1+5) + (a7_2+5), explain: `<b>Ghi nhớ:</b> Hai góc kề nhau có một cạnh chung, góc tổng bằng tổng số đo hai góc thành phần. Ta có: <b>${a7_1+5}&deg; + ${a7_2+5}&deg; = ${(a7_1+5)+(a7_2+5)}&deg;</b>.` }
+            });
+            // 8
+            let a8 = (Math.floor(Math.random() * 40) + 20) * 2;
+            q.push({
+                main: { text: `Hai đường thẳng <i>xy</i> và <i>uv</i> cắt nhau tại <i>O</i>. Biết <i>xOu</i> = ${a8}&deg;. Tia phân giác <i>Om</i> của góc đối đỉnh với <i>xOu</i> tạo với <i>Oy</i> một góc bao nhiêu độ?`, ans: a8 / 2 },
+                similar: { text: `Hai đường thẳng <i>AB</i> và <i>CD</i> cắt nhau tại <i>O</i>. Biết <i>AOC</i> = ${a8-20}&deg;. Phân giác <i>Ot</i> của góc đối đỉnh <i>BOD</i> tạo với <i>OB</i> một góc bao nhiêu độ?`, ans: (a8-20) / 2, explain: `<b>Bước 1:</b> Góc BOD đối đỉnh với AOC nên BOD = ${a8-20}&deg;.<br><b>Bước 2:</b> Tia phân giác chia đôi góc BOD, nên góc tạo thành là <b>${a8-20}&deg; : 2 = ${(a8-20)/2}&deg;</b>.` }
+            });
+            // 9
+            q.push({
+                main: { text: `Cho hai góc kề bù <i>xOy</i> và <i>yOz</i>. Tia <i>Om</i> là phân giác <i>xOy</i>, tia <i>On</i> là phân giác <i>yOz</i>. Góc <i>mOn</i> có số đo là?`, ans: 90 },
+                similar: { text: `Góc tạo bởi hai tia phân giác của hai góc kề bù luôn có số đo cố định bằng bao nhiêu độ?`, ans: 90, explain: `<b>Ghi nhớ lý thuyết:</b> Góc tạo bởi hai tia phân giác của hai góc kề bù <b>luôn luôn là góc vuông</b>, tức là có số đo cố định bằng <b>90&deg;</b>.` }
+            });
+            // 10
+            let a10 = (Math.floor(Math.random() * 25) + 15) * 2;
+            q.push({
+                main: { text: `Cho góc bẹt <i>xOy</i>. Vẽ tia <i>Oz</i> sao cho <i>xOz</i> = ${a10}&deg;. Vẽ tia <i>Ot</i> là phân giác của góc <i>zOy</i>. Tính <i>xOt</i>.`, ans: a10 + (180-a10)/2 },
+                similar: { text: `Cho góc bẹt <i>AOB</i>. Vẽ tia <i>OM</i> sao cho <i>AOM</i> = ${a10+20}&deg;. Vẽ tia <i>ON</i> là phân giác của <i>MOB</i>. Tính <i>AON</i>.`, ans: (a10+20) + (180-(a10+20))/2, explain: `<b>Bước 1:</b> Góc bẹt bằng 180&deg;. Góc MOB = 180&deg; - ${a10+20}&deg; = ${180-(a10+20)}&deg;.<br><b>Bước 2:</b> Góc MON = ${180-(a10+20)}&deg; : 2 = ${(180-(a10+20))/2}&deg;.<br><b>Bước 3:</b> Góc AON = AOM + MON = ${a10+20}&deg; + ${(180-(a10+20))/2}&deg; = <b>${(a10+20) + (180-(a10+20))/2}&deg;</b>.` }
+            });
+            return q;
+        }
+
+        function startGame() {
+            playerName = document.getElementById('playerNameInput').value.trim();
+            if (!playerName) return alert("Thuyền trưởng cần phải có tên để ra khơi!");
+            
+            questions = generateQuestions();
+            document.getElementById('displayPlayerName').innerText = playerName;
+            document.getElementById('screenWelcome').classList.add('hidden');
+            document.getElementById('screenGame').classList.remove('hidden');
+            renderMap();
+            renderQuestion();
+        }
+
+        function renderMap() {
+            const mapHtml = [];
+            for(let i=0; i<10; i++) {
+                if(i < currentIdx) {
+                    mapHtml.push(`<div class="w-8 h-8 rounded-full bg-green-500 border-2 border-green-700 flex items-center justify-center text-white text-sm z-10 shadow-sm shadow-green-200">✔️</div>`);
+                } else if (i === currentIdx) {
+                    mapHtml.push(`<div class="w-10 h-10 rounded-full bg-amber-400 border-4 border-amber-600 flex items-center justify-center text-xl z-10 animate-bounce shadow-lg shadow-amber-300">⛵</div>`);
+                } else {
+                    mapHtml.push(`<div class="w-6 h-6 rounded-full bg-amber-200 border-2 border-amber-400 z-10 mt-1 shadow-inner"></div>`);
+                }
+            }
+            document.getElementById('mapProgress').innerHTML = mapHtml.join('');
+        }
+
+        function renderQuestion() {
+            const q = isSimilarMode ? questions[currentIdx].similar : questions[currentIdx].main;
+            document.getElementById('questionText').innerHTML = q.text;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').focus();
+            
+            document.getElementById('scoreDisplay').innerText = score;
+            
+            const badge = document.getElementById('badgeSimilar');
+            if(isSimilarMode) badge.classList.remove('hidden');
+            else badge.classList.add('hidden');
+            
+            startTimer();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 60;
+            const timerDisplay = document.getElementById('timerDisplay');
+            timerDisplay.innerText = `${timeLeft}s`;
+            timerDisplay.className = "font-heading text-2xl text-white leading-none";
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerDisplay.innerText = `${timeLeft}s`;
+                
+                if (timeLeft <= 15) {
+                    timerDisplay.className = "font-heading text-2xl text-red-400 leading-none animate-pulse";
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    submitAnswer(true); 
+                }
+            }, 1000);
+        }
+
+        function stopTimer() { clearInterval(timerInterval); }
+
+        function showToast(msg, type, icon) {
+            const toast = document.getElementById('toastMessage');
+            document.getElementById('toastText').innerHTML = msg;
+            document.getElementById('toastIcon').innerText = icon;
+            
+            toast.classList.remove('hidden', 'bg-green-100', 'border-green-400', 'text-green-900', 'bg-red-100', 'border-red-400', 'text-red-900', 'bg-blue-100', 'border-blue-400', 'text-blue-900');
+            
+            if (type === 'success') toast.classList.add('bg-green-100', 'border-green-400', 'text-green-900');
+            else if (type === 'error') toast.classList.add('bg-red-100', 'border-red-400', 'text-red-900');
+            else toast.classList.add('bg-blue-100', 'border-blue-400', 'text-blue-900');
+
+            // Hiệu ứng
+            toast.classList.remove('scale-100');
+            toast.classList.add('scale-105');
+            setTimeout(() => { toast.classList.remove('scale-105'); toast.classList.add('scale-100'); }, 200);
+        }
+
+        function shakeInput() {
+            const input = document.getElementById('answerInput');
+            input.classList.add('shake', 'border-red-500', 'bg-red-50');
+            setTimeout(() => { input.classList.remove('shake', 'border-red-500', 'bg-red-50'); }, 400);
+        }
+
+        function disableInput(disabled = true) {
+            document.getElementById('answerInput').disabled = disabled;
+            document.getElementById('submitBtn').disabled = disabled;
+            if(disabled) {
+                document.getElementById('submitBtn').classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                document.getElementById('submitBtn').classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        function submitAnswer(isTimeOut = false) {
+            const inputVal = document.getElementById('answerInput').value;
+            if (!isTimeOut && inputVal === '') {
+                shakeInput();
+                return;
+            }
+            
+            stopTimer(); 
+            disableInput(true);
+            const currentQ = isSimilarMode ? questions[currentIdx].similar : questions[currentIdx].main;
+            const userAns = parseFloat(inputVal);
+
+            // Xử lý Hết giờ
+            if (isTimeOut) {
+                shakeInput();
+                if (!isSimilarMode) {
+                    score -= 5;
+                    showToast(`Hết thời gian rồi ${playerName}! Biển cả không chờ đợi ai, nhưng ta luôn có cơ hội thứ hai để sửa sai. (-5 Vàng)`, "error", "⌛");
+                    isSimilarMode = true;
+                    setTimeout(() => { document.getElementById('toastMessage').classList.add('hidden'); disableInput(false); renderQuestion(); }, 4000);
+                } else {
+                    showExplanationModal(currentQ.explain); 
+                }
+                document.getElementById('scoreDisplay').innerText = score;
+                return;
+            }
+
+            // Xử lý Trả lời (Đúng/Sai)
+            if (userAns === currentQ.ans) {
+                if (!isSimilarMode) {
+                    score += 10;
+                    correctMainAnswers++;
+                    const successMsgs = [
+                        `Tuyệt vời thuyền trưởng ${playerName}! Bản đồ đã chỉ đúng hướng. (+10 Vàng)`,
+                        `Chính xác! Trí tuệ của ${playerName} sáng như viên ngọc trai. (+10 Vàng)`,
+                        `Khóa đã mở! ${playerName} đang làm rất tốt, thẳng tiến thôi. (+10 Vàng)`
+                    ];
+                    showToast(successMsgs[Math.floor(Math.random() * successMsgs.length)], "success", "🗝️");
+                    nextQuestion();
+                } else {
+                    showToast(`Rất tốt ${playerName}! Giông bão đã lùi bước trước sự kiên trì của em. Ta đi tiếp nào.`, "success", "🌈");
+                    isSimilarMode = false;
+                    nextQuestion();
+                }
+            } else {
+                shakeInput();
+                if (!isSimilarMode) {
+                    score -= 5;
+                    showToast(`Đi chệch hướng một chút rồi ${playerName}. Thủy thủ giỏi được rèn luyện từ giông bão! Hãy thử lại ở hòn đảo tương tự này. (-5 Vàng)`, "error", "🌩️");
+                    isSimilarMode = true;
+                    setTimeout(() => { document.getElementById('toastMessage').classList.add('hidden'); disableInput(false); renderQuestion(); }, 4000);
+                } else {
+                    showExplanationModal(currentQ.explain); 
+                }
+            }
+            document.getElementById('scoreDisplay').innerText = score;
+        }
+
+        function showExplanationModal(explainHTML) {
+            document.getElementById('toastMessage').classList.add('hidden');
+            document.getElementById('explanationText').innerHTML = explainHTML;
+            document.getElementById('explanationModal').classList.remove('hidden');
+        }
+
+        function closeExplanation() {
+            document.getElementById('explanationModal').classList.add('hidden');
+            isSimilarMode = false;
+            nextQuestion(0); // Bỏ qua thời gian chờ, đi thẳng tới câu mới
+        }
+
+        function nextQuestion(delay = 3000) {
+            setTimeout(() => {
+                document.getElementById('toastMessage').classList.add('hidden');
+                disableInput(false);
+                currentIdx++;
+                renderMap();
+                if (currentIdx >= questions.length) {
+                    showResult();
+                } else {
+                    renderQuestion();
+                }
+            }, delay); 
+        }
+
+        function showResult() {
+            document.getElementById('screenGame').classList.add('hidden');
+            document.getElementById('screenResult').classList.remove('hidden');
+            document.getElementById('finalScore').innerText = score;
+
+            const title = document.getElementById('resultTitle');
+            const sub = document.getElementById('resultSubtitle');
+            const icon = document.getElementById('resultIcon');
+            const reward = document.getElementById('rewardSection');
+
+            if (correctMainAnswers >= 8) {
+                icon.innerHTML = "🏆";
+                title.innerText = "Huyền Thoại Biển Cả!";
+                title.className = "text-4xl md:text-5xl font-extrabold text-green-700 mb-4 font-heading drop-shadow-md";
+                sub.innerText = `Tuyệt vời quá ${playerName}! Em đã chứng minh được tư duy toán học vô cùng sắc bén và sự kiên trì đáng nể. Kho báu này là của em!`;
+                reward.classList.remove('hidden');
+            } else if (correctMainAnswers >= 5) {
+                icon.innerHTML = "🏅";
+                title.innerText = "Thủy Thủ Cừ Khôi!";
+                title.className = "text-4xl md:text-5xl font-extrabold text-blue-700 mb-4 font-heading";
+                sub.innerText = `Chuyến hải trình rất tốt ${playerName}! Em đã có nền tảng vững vàng. Chỉ cần cẩn thận hơn lúc xem la bàn là em sẽ trở thành Huyền thoại.`;
+            } else {
+                icon.innerHTML = "⚓";
+                title.innerText = "Chớ Nản Lòng!";
+                title.className = "text-4xl md:text-5xl font-extrabold text-red-700 mb-4 font-heading";
+                sub.innerText = `Đừng buồn ${playerName} nhé! Mọi thuyền trưởng vĩ đại đều từng đi lạc. Em hãy về ôn lại kiến thức và tiếp tục ra khơi, chắc chắn lần sau em sẽ chinh phục được biển cả!`;
+            }
+        }
+
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') submitAnswer();
+        });
+    </script>
+</body>
+</html>
